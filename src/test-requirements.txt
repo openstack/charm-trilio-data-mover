@@ -1,7 +1,8 @@
-# Unit test requirements
-flake8>=2.2.4,<=2.4.1
-os-testr>=0.4.1
-charms.reactive
-mock>=1.2
-coverage>=3.6
-git+https://github.com/openstack/charms.openstack#egg=charms.openstack
+# This file is managed centrally by release-tools and should not be modified
+# within individual charm repos.  See the 'global' dir contents for available
+# choices of *requirements.txt files for OpenStack Charms:
+#     https://github.com/openstack-charmers/release-tools
+#
+# Functional Test Requirements (let Zaza's dependencies solve all dependencies here!)
+git+https://github.com/openstack-charmers/zaza.git#egg=zaza
+git+https://github.com/openstack-charmers/zaza-openstack-tests.git#egg=zaza.openstack
