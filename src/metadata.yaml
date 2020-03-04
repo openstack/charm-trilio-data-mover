@@ -1,5 +1,6 @@
 ---
 name: trilio-data-mover
+display-name: Trilio Data Mover
 summary: Trilio-Data-Mover plugin
 maintainer: Trilio Support <support@trilio.io>
 description: |
@@ -9,7 +10,6 @@ tags:
   - openstack
   - storage
   - backup
-  - TVMv3.4
 series:
   - xenial
   - bionic
