@@ -13,7 +13,6 @@
 # limitations under the License.
 
 import collections
-import subprocess
 import shutil
 
 import charmhelpers.core.hookenv as hookenv
@@ -23,12 +22,9 @@ import charms_openstack.charm
 import charms_openstack.adapters as os_adapters
 
 
-DM_USR = 'nova'
-DM_GRP = 'nova'
-VALID_BACKUP_TARGETS = [
-    'nfs',
-    's3'
-]
+DM_USR = "nova"
+DM_GRP = "nova"
+VALID_BACKUP_TARGETS = ["nfs", "s3"]
 
 
 class TrilioDataMoverCharm(charms_openstack.charm.OpenStackCharm):
@@ -37,9 +33,9 @@ class TrilioDataMoverCharm(charms_openstack.charm.OpenStackCharm):
 
     adapters_class = os_adapters.OpenStackAPIRelationAdapters
 
-    data_mover_conf = '/etc/tvault-contego/tvault-contego.conf'
+    data_mover_conf = "/etc/tvault-contego/tvault-contego.conf"
     logrotate_conf = "/etc/logrotate.d/tvault-contego"
-    
+
     # First release supported
     release = "stein"
 
@@ -59,7 +55,7 @@ class TrilioDataMoverCharm(charms_openstack.charm.OpenStackCharm):
 
     def get_amqp_credentials(self):
         return ("datamover", "openstack")
-    
+
     def configure_source(self):
         with open("/etc/apt/sources.list.d/trilio-wlm.list", "w") as tsources:
             tsources.write(hookenv.config("triliovault-pkg-source"))
@@ -67,21 +63,19 @@ class TrilioDataMoverCharm(charms_openstack.charm.OpenStackCharm):
 
     @property
     def packages(self):
-        if hookenv.config('python-version') == 2:
-            return ['tvault-contego', 'nfs-common']
-        return ['python3-tvault-contego', 'nfs-common']
+        if hookenv.config("python-version") == 2:
+            return ["tvault-contego", "nfs-common"]
+        return ["python3-tvault-contego", "nfs-common"]
 
     @property
     def services(self):
-        if hookenv.config('backup-target-type') == 's3':
+        if hookenv.config("backup-target-type") == "s3":
             return ["tvault-contego", "tvault-object-store"]
         return ["tvault-contego"]
 
     @property
     def restart_map(self):
-        return {
-            self.data_mover_conf: self.services,
-        }
+        return {self.data_mover_conf: self.services}
 
     # TODO: drop once packaging is updated
     def install(self):
@@ -90,21 +84,41 @@ class TrilioDataMoverCharm(charms_openstack.charm.OpenStackCharm):
         self.install_files()
         self.configure_nova_user()
 
+    # TODO: drop once packaging is updated
+    def upgrade_charm(self):
+        super().upgrade_charm()
+        self.ensure_dirs()
+
     # TODO: drop once included in packages
     def ensure_dirs(self):
         """
         Ensures all the required directories are present
         and have appropriate permissions.
         """
-        ch_host.mkdir(hookenv.config('tv-data-dir'),
-                      owner=DM_USR, group=DM_GRP, perms=0o770, force=True)
+        ch_host.mkdir(
+            hookenv.config("tv-data-dir"),
+            owner=DM_USR,
+            group=DM_GRP,
+            perms=0o770,
+            force=True,
+        )
         # TODO: review this?
         # os.system('rm -rf {}'.format(hookenv.config('tv-data-dir-old')))
-        ch_host.mkdir(hookenv.config('tv-data-dir-old'),
-                      owner=DM_USR, group=DM_GRP, perms=0o770, force=True)
-        ch_host.mkdir('/etc/tvault-contego',
-                      owner='root', group=DM_GRP, perms=0o750, force=True)
-        
+        ch_host.mkdir(
+            hookenv.config("tv-data-dir-old"),
+            owner=DM_USR,
+            group=DM_GRP,
+            perms=0o770,
+            force=True,
+        )
+        ch_host.mkdir(
+            "/etc/tvault-contego",
+            owner="root",
+            group=DM_GRP,
+            perms=0o750,
+            force=True,
+        )
+
     # TODO: drop once included in packages
     def install_files(self):
         """
@@ -114,14 +128,10 @@ class TrilioDataMoverCharm(charms_openstack.charm.OpenStackCharm):
         # "files/trilio/tvault-object-store.service":
         # "/etc/systemd/system",
         _file_map = {
-            "files/trilio/tvault-contego.service":
-                "/etc/systemd/system",
-            "files/trilio/trilio.filters":
-                "/etc/nova/rootwrap.d",
-            "files/trilio/trilio_sudoers":
-                "/etc/sudoers.d/",
-            "files/trilio/tvault-contego":
-                "/etc/logrotate.d/",
+            "files/trilio/tvault-contego.service": "/etc/systemd/system",
+            "files/trilio/trilio.filters": "/etc/nova/rootwrap.d",
+            "files/trilio/trilio_sudoers": "/etc/sudoers.d/",
+            "files/trilio/tvault-contego": "/etc/logrotate.d/",
         }
         for file, target in _file_map.items():
             shutil.copy(file, target)
@@ -129,5 +139,5 @@ class TrilioDataMoverCharm(charms_openstack.charm.OpenStackCharm):
     # TODO: review why this is required
     def configure_nova_user(self):
         """Add nova user to kvm and disk groups"""
-        for grp in ('kvm', 'disk'):
+        for grp in ("kvm", "disk"):
             ch_host.add_user_to_group(DM_USR, grp)

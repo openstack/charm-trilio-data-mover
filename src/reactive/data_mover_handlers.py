@@ -17,11 +17,7 @@ import charms.reactive as reactive
 # trilio_dm
 import charm.openstack.trilio_dm as trilio_dm  # noqa
 
-charm.use_defaults(
-    "charm.installed",
-    "config.changed",
-    "update-status",
-)
+charm.use_defaults("charm.installed", "config.changed", "update-status")
 
 
 @reactive.when("amqp.available")
@@ -36,7 +32,7 @@ def render_config(*args):
 
 
 # NOTE(jamespage): default handler is in api layer which is to much
-@reactive.when('amqp.connected')
+@reactive.when("amqp.connected")
 def default_amqp_connection(amqp):
     """Handle the default amqp connection.
 
