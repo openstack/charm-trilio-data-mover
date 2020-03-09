@@ -1,0 +1,16 @@
+[Unit]
+Description = TrilioVault DataMover
+After = nova-compute.service
+
+[Service]
+User = nova
+Group = nova
+Type = simple
+ExecStart = /usr/bin/tvault-contego --config-file=/etc/nova/nova.conf --config-file=/etc/tvault-contego/tvault-contego.conf               
+MemoryMax = 10G
+TimeoutStopSec = 20
+KillMode = process
+Restart = always
+
+[Install]
+WantedBy = multi-user.target

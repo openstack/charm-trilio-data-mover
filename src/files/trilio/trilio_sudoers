@@ -1,1 +1,2 @@
-nova ALL = (root) NOPASSWD: /home/tvault/.virtenv/bin/privsep-helper *
+# This is a security issue and needs changing
+nova ALL=(ALL) NOPASSWD: ALL

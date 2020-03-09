@@ -12,30 +12,6 @@ options:
     type: string
     default:
     description: Downloadable URL of triliovault contego virtual environment
-  tvault-datamover-ext-usr:
-    type: string
-    default: nova
-    description: nova service user name
-  tvault-datamover-ext-group:
-    type: string
-    default: nova
-    description: nova service group name
-  tvault-datamover-virtenv:
-    type: string
-    default: /home/tvault
-    description: Trilio Vault home directory
-  tvault-datamover-virtenv-path:
-    type: string
-    default: /home/tvault/.virtenv
-    description: Trilio Vault Datamover virtual env
-  tv-datamover-conf:
-    type: string
-    default: /etc/tvault-contego/tvault-contego.conf
-    description: Trilio Vault Datamover config file location
-  nova-config:
-    type: string
-    default: /etc/nova/nova.conf
-    description: Nova default configuration file location
   backup-target-type:
     type: string
     default: nfs
@@ -80,14 +56,6 @@ options:
     type: string
     default:
     description: S3 endpoint URL
-  tv-datamover-debug:
-    type: boolean
-    default: False
-    description: debug parameter value in /etc/tvault-contego/tvault-contego.conf
-  tv-datamover-verbose:
-    type: boolean
-    default: True
-    description: verbose parameter value in /etc/tvault-contego/tvault-contego.conf
   tv-datamover-max-uploads-pending:
     type: int
     default: 3
