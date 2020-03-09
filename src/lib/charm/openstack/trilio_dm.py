@@ -16,6 +16,7 @@ import collections
 import shutil
 
 import charmhelpers.core.hookenv as hookenv
+import charmhelpers.fetch as fetch
 import charmhelpers.core.host as ch_host
 
 import charms_openstack.charm
@@ -59,7 +60,7 @@ class TrilioDataMoverCharm(charms_openstack.charm.OpenStackCharm):
     def configure_source(self):
         with open("/etc/apt/sources.list.d/trilio-wlm.list", "w") as tsources:
             tsources.write(hookenv.config("triliovault-pkg-source"))
-        super().configure_source()
+        fetch.apt_update(fatal=True)
 
     @property
     def packages(self):
@@ -79,6 +80,7 @@ class TrilioDataMoverCharm(charms_openstack.charm.OpenStackCharm):
 
     # TODO: drop once packaging is updated
     def install(self):
+        self.configure_source()
         super().install()
         self.ensure_dirs()
         self.install_files()
