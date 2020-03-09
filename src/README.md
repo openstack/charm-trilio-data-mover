@@ -8,15 +8,11 @@ on each compute node.
 TrilioVault Data Mover relies on services from nova-compute and rabbitmq-server.
 Steps to deploy the charm:
 
-juju deploy trilio-data-mover --config user-config.yaml
-
-juju deploy nova-compute
-
-juju deploy rabbitmq-server
-
-juju add-relation trilio-data-mover rabbitmq-server
-
-juju add-relation trilio-data-mover nova-compute
+    juju deploy trilio-data-mover --config user-config.yaml
+    juju deploy nova-compute
+    juju deploy rabbitmq-server
+    juju add-relation trilio-data-mover rabbitmq-server
+    juju add-relation trilio-data-mover nova-compute
 
 # Configuration
 
@@ -58,7 +54,7 @@ For non-AWS S3 backup target:
 The configuration options need to be updated based on the S3 specific requirements and the parameters that are not needed can be omitted.
 
 TrilioVault Packages are downloaded from the repository added in below config parameter. Please change this only if you wish to download
-TrilioVault Packages from a different source. 
+TrilioVault Packages from a different source.
 
     triliovault-pkg-source: Repository address of triliovault packages
 
