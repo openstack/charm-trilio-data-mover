@@ -14,7 +14,6 @@
 
 import collections
 import shutil
-import os
 
 import charmhelpers.core.hookenv as hookenv
 import charmhelpers.fetch as fetch
