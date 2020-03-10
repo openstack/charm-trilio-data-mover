@@ -1,6 +1,22 @@
+# Copyright 2020 Canonical Ltd
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#  http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 import mock
-import unittest
-import trilio_data_mover as datamover
+import reactive.data_mover_handlers as datamover
+
+import charms_openstack.test_utils as test_utils
+
 
 _when_args = {}
 _when_not_args = {}
@@ -23,7 +39,7 @@ def mock_hook_factory(d):
     return mock_hook
 
 
-class Test(unittest.TestCase):
+class Test(test_utils.PatchHelper):
     @classmethod
     def setUpClass(cls):
         cls._patched_when = mock.patch(
@@ -60,35 +76,15 @@ class Test(unittest.TestCase):
 
             importlib.reload(datamover)
 
-    def setUp(self):
-        self._patches = {}
-        self._patches_start = {}
-
-    def tearDown(self):
-        for k, v in self._patches.items():
-            v.stop()
-            setattr(self, k, None)
-        self._patches = None
-        self._patches_start = None
-
-    def patch(self, obj, attr, return_value=None, side_effect=None):
-        mocked = mock.patch.object(obj, attr)
-        self._patches[attr] = mocked
-        started = mocked.start()
-        started.return_value = return_value
-        started.side_effect = side_effect
-        self._patches_start[attr] = started
-        setattr(self, attr, started)
-
     def test_registered_hooks(self):
         # test that the hooks actually registered the relation expressions that
         # are meaningful for this interface: this is to handle regressions.
         # The keys are the function names that the hook attaches to.
         when_patterns = {
-            "stop_tvault_contego_plugin": ("tvault-contego.stopping",)
+            "render_config": ("amqp.available",),
+            "default_amqp_connection": ("amqp.connected",)
         }
         when_not_patterns = {
-            "install_tvault_contego_plugin": ("tvault-contego.installed",)
         }
         # check the when hooks are attached to the expected functions
         for t, p in [
@@ -107,87 +103,3 @@ class Test(unittest.TestCase):
                     sorted(p[f]),
                     "{}: incorrect state registration".format(f),
                 )
-
-    def test_install_plugin(self):
-        self.patch(datamover, "install_plugin")
-        datamover.install_plugin("pkg_name")
-        self.install_plugin.assert_called_once_with("pkg_name")
-
-    def test_uninstall_plugin(self):
-        self.patch(datamover, "uninstall_plugin")
-        datamover.uninstall_plugin()
-        self.uninstall_plugin.assert_called_once_with()
-
-    def test_install_tvault_contego_plugin(self):
-        self.patch(datamover, "install_tvault_contego_plugin")
-        datamover.install_tvault_contego_plugin()
-        self.install_tvault_contego_plugin.assert_called_once_with()
-
-    def test_stop_tvault_contego_plugin(self):
-        self.patch(datamover, "config")
-        self.patch(datamover, "status_set")
-        self.patch(datamover, "remove_state")
-        self.patch(datamover, "uninstall_plugin")
-        self.uninstall_plugin.return_value = True
-        datamover.stop_tvault_contego_plugin()
-        self.status_set.assert_called_with("maintenance", "Stopping...")
-        self.remove_state.assert_called_with("tvault-contego.stopping")
-
-    def test_s3_object_storage_fail(self):
-        self.patch(datamover, "config")
-        self.config.return_value = "s3"
-        self.patch(datamover, "apt_update")
-        self.patch(datamover, "status_set")
-        self.patch(datamover, "validate_backup")
-        self.validate_backup.return_value = True
-        self.patch(datamover, "add_users")
-        self.add_users.return_value = True
-        self.patch(datamover, "create_virt_env")
-        self.create_virt_env.return_value = True
-        self.patch(datamover, "ensure_files")
-        self.ensure_files.return_value = True
-        self.patch(datamover, "create_conf")
-        self.create_conf.return_value = True
-        self.patch(datamover, "ensure_data_dir")
-        self.ensure_data_dir.return_value = True
-        self.patch(datamover, "create_service_file")
-        self.create_service_file.return_value = True
-        self.patch(datamover, "create_object_storage_service")
-        self.create_object_storage_service.return_value = False
-        self.patch(datamover.os, "system")
-        self.patch(datamover, "log")
-        datamover.install_tvault_contego_plugin()
-        self.status_set.assert_called_with(
-            "blocked", "Failed while creating ObjectStore service file"
-        )
-
-    def test_s3_object_storage_pass(self):
-        self.patch(datamover, "config")
-        self.patch(datamover, "apt_update")
-        self.patch(datamover, "status_set")
-        self.patch(datamover, "validate_backup")
-        self.validate_backup.return_value = True
-        self.patch(datamover, "add_users")
-        self.add_users.return_value = True
-        self.patch(datamover, "create_virt_env")
-        self.create_virt_env.return_value = True
-        self.patch(datamover, "ensure_files")
-        self.ensure_files.return_value = True
-        self.patch(datamover, "create_conf")
-        self.create_conf.return_value = True
-        self.patch(datamover, "ensure_data_dir")
-        self.ensure_data_dir.return_value = True
-        self.patch(datamover, "create_service_file")
-        self.create_service_file.return_value = True
-        self.patch(datamover, "create_object_storage_service")
-        self.create_object_storage_service.return_value = True
-        self.patch(datamover, "service_restart")
-        self.patch(datamover, "set_flag")
-        self.patch(datamover, "application_version_set")
-        self.patch(datamover, "get_new_version")
-        self.patch(datamover.os, "system")
-        datamover.install_tvault_contego_plugin()
-        self.service_restart.assert_called_with("tvault-contego")
-        self.status_set.assert_called_with("active", "Ready...")
-        self.application_version_set.assert_called_once()
-        self.set_flag.assert_called_with("tvault-contego.installed")
