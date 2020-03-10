@@ -14,6 +14,7 @@
 
 import collections
 import shutil
+import os
 
 import charmhelpers.core.hookenv as hookenv
 import charmhelpers.fetch as fetch
@@ -58,7 +59,8 @@ class TrilioDataMoverCharm(charms_openstack.charm.OpenStackCharm):
         return ("datamover", "openstack")
 
     def configure_source(self):
-        with open("/etc/apt/sources.list.d/trilio-wlm.list", "w") as tsources:
+        with open("/etc/apt/sources.list.d/"
+                  "trilio-gemfury-sources.list", "w") as tsources:
             tsources.write(hookenv.config("triliovault-pkg-source"))
         fetch.apt_update(fatal=True)
 
