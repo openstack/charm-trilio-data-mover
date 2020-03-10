@@ -82,10 +82,9 @@ class Test(test_utils.PatchHelper):
         # The keys are the function names that the hook attaches to.
         when_patterns = {
             "render_config": ("amqp.available",),
-            "default_amqp_connection": ("amqp.connected",)
+            "default_amqp_connection": ("amqp.connected",),
         }
-        when_not_patterns = {
-        }
+        when_not_patterns = {}
         # check the when hooks are attached to the expected functions
         for t, p in [
             (_when_args, when_patterns),
