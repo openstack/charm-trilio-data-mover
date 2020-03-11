@@ -1,11 +1,12 @@
 # Overview
 
-TrilioVault Data Mover provides service for TrilioVault Datamover
-on each compute node.
+This charm provides the TrilioVault Data Mover Service which forms
+part of the [TrilioVault Cloud Backup solution][trilio.io].
 
 # Usage
 
 TrilioVault Data Mover relies on services from nova-compute and rabbitmq-server.
+
 Steps to deploy the charm:
 
     juju deploy trilio-data-mover --config user-config.yaml
@@ -18,12 +19,13 @@ Steps to deploy the charm:
 
 Please provide below configuration options using a config file:
 
-python-version: "Openstack base python version(2 or 3)"
+    python-version: "Openstack base python version(2 or 3)"
 
-NOTE - Default value is set to "3". Please ensure to update this based on python version since installing
-       python3 packages on python2 based setup might have unexpected impact.
+NOTE - Default value is set to "3". Please ensure to update this based on
+python version since installing python3 packages on python2 based setup
+might have unexpected impact.
 
-backup-target-type: Backup target type e.g. nfs or s3
+    backup-target-type: nfs or s3
 
 For NFS backup target:
 
@@ -51,9 +53,11 @@ For non-AWS S3 backup target:
 
     tv-s3-bucket: S3 bucket name
 
-The configuration options need to be updated based on the S3 specific requirements and the parameters that are not needed can be omitted.
+The configuration options need to be updated based on the S3 specific
+requirements and the parameters that are not needed can be omitted.
 
-TrilioVault Packages are downloaded from the repository added in below config parameter. Please change this only if you wish to download
+TrilioVault Packages are downloaded from the repository added in
+below config parameter. Please change this only if you wish to download
 TrilioVault Packages from a different source.
 
     triliovault-pkg-source: Repository address of triliovault packages
@@ -63,3 +67,4 @@ TrilioVault Packages from a different source.
 Please report bugs on [Launchpad][lp-bugs-charm-trilio-data-mover].
 
 [lp-bugs-charm-trilio-data-mover]: https://bugs.launchpad.net/charm-trilio-data-mover/+filebug
+[trilio.io]: https://www.trilio.io/triliovault/openstack
