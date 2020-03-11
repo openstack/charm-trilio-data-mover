@@ -58,6 +58,8 @@ TrilioVault Packages from a different source.
 
     triliovault-pkg-source: Repository address of triliovault packages
 
-# Contact Information
+# Bugs
 
-Trilio Support <support@trilio.com>
+Please report bugs on [Launchpad][lp-bugs-charm-trilio-data-mover].
+
+[lp-bugs-charm-trilio-data-mover]: https://bugs.launchpad.net/charm-trilio-data-mover/+filebug
