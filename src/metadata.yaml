@@ -1,10 +1,14 @@
 ---
 name: trilio-data-mover
-display-name: Trilio Data Mover
-summary: Trilio-Data-Mover plugin
-maintainer: Trilio Support <support@trilio.io>
+display-name: TrilioVault Data Mover
+summary: TrilioVault Data Mover Service
+maintainer: OpenStack Charmers <openstack-discuss@lists.openstack.org>
 description: |
-  Trilio-Data-Mover plugin installation on all compute nodes
+  TrilioVault provides a backup and recovery solution that natively
+  integrates with OpenStack Clouds.
+  .
+  This charm provides the TrilioVault Data Mover Service which
+  forms part of the TrilioVault solution.
 subordinate: true
 tags:
   - openstack

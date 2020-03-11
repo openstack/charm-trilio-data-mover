@@ -13,8 +13,6 @@
 # limitations under the License.
 
 
-import mock
-
 import charm.openstack.trilio_dm as trilio_dm
 import charms_openstack.test_utils as test_utils
 
