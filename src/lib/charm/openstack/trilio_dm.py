@@ -12,20 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import base64
 import collections
-import shutil
 
 import charmhelpers.core.hookenv as hookenv
 import charmhelpers.fetch as fetch
-import charmhelpers.core.host as ch_host
 
 import charms_openstack.charm
 import charms_openstack.adapters as os_adapters
 
 
-DM_USR = "nova"
-DM_GRP = "nova"
-VALID_BACKUP_TARGETS = ["nfs", "s3"]
+VALID_BACKUP_TARGETS = ["nfs"]
 
 
 class TrilioDataMoverCharm(charms_openstack.charm.OpenStackCharm):
@@ -52,7 +49,7 @@ class TrilioDataMoverCharm(charms_openstack.charm.OpenStackCharm):
 
     # configuration file permissions
     user = "root"
-    group = DM_GRP
+    group = "nova"
 
     def get_amqp_credentials(self):
         return ("datamover", "openstack")
@@ -80,68 +77,10 @@ class TrilioDataMoverCharm(charms_openstack.charm.OpenStackCharm):
     def restart_map(self):
         return {self.data_mover_conf: self.services}
 
-    # TODO: drop once packaging is updated
+    def _encode_endpoint(self, backup_endpoint):
+        """base64 encode an backup endpoint for cross mounting support"""
+        return base64.b64encode(backup_endpoint.encode()).decode()
+
     def install(self):
         self.configure_source()
         super().install()
-        self.ensure_dirs()
-        self.install_files()
-        self.configure_nova_user()
-
-    # TODO: drop once packaging is updated
-    def upgrade_charm(self):
-        super().upgrade_charm()
-        self.ensure_dirs()
-
-    # TODO: drop once included in packages
-    def ensure_dirs(self):
-        """
-        Ensures all the required directories are present
-        and have appropriate permissions.
-        """
-        ch_host.mkdir(
-            hookenv.config("tv-data-dir"),
-            owner=DM_USR,
-            group=DM_GRP,
-            perms=0o770,
-            force=True,
-        )
-        # TODO: review this?
-        # os.system('rm -rf {}'.format(hookenv.config('tv-data-dir-old')))
-        ch_host.mkdir(
-            hookenv.config("tv-data-dir-old"),
-            owner=DM_USR,
-            group=DM_GRP,
-            perms=0o770,
-            force=True,
-        )
-        ch_host.mkdir(
-            "/etc/tvault-contego",
-            owner="root",
-            group=DM_GRP,
-            perms=0o750,
-            force=True,
-        )
-
-    # TODO: drop once included in packages
-    def install_files(self):
-        """
-        Installs a load of files that should be provided
-        by the package
-        """
-        # "files/trilio/tvault-object-store.service":
-        # "/etc/systemd/system",
-        _file_map = {
-            "files/trilio/tvault-contego.service": "/etc/systemd/system",
-            "files/trilio/trilio.filters": "/etc/nova/rootwrap.d",
-            "files/trilio/trilio_sudoers": "/etc/sudoers.d/",
-            "files/trilio/tvault-contego": "/etc/logrotate.d/",
-        }
-        for file, target in _file_map.items():
-            shutil.copy(file, target)
-
-    # TODO: review why this is required
-    def configure_nova_user(self):
-        """Add nova user to kvm and disk groups"""
-        for grp in ("kvm", "disk"):
-            ch_host.add_user_to_group(DM_USR, grp)

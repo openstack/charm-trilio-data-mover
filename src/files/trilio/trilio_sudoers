@@ -1,2 +1,0 @@
-# This is a security issue and needs changing
-nova ALL=(ALL) NOPASSWD: ALL

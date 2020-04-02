@@ -8,18 +8,10 @@ options:
     type: string
     default: "deb [trusted=yes] https://apt.fury.io/triliodata-3-4/ /"
     description: Repository address of triliovault packages
-  tvault-datamover-virtenv-url:
-    type: string
-    default:
-    description: Downloadable URL of triliovault contego virtual environment
   backup-target-type:
     type: string
     default: nfs
-    description: |
-        Type of backup target.
-        Valid types are-
-          - nfs
-          - s3
+    description: backup target type - nfs or s3
   nfs-shares:
     type: string
     default:
@@ -28,6 +20,7 @@ options:
     type: string
     default: nolock,soft,timeo=180,intr,lookupcache=none
     description: NFS Options
+  # DROP
   tv-data-dir:
     type: string
     default: /var/triliovault-mounts
@@ -36,6 +29,7 @@ options:
     type: string
     default: /var/triliovault
     description: Old TrilioVault data dir
+  # UNSUPPORTED
   tv-s3-secret-key:
     type: string
     default: sample_s3_secret_key
@@ -56,6 +50,7 @@ options:
     type: string
     default:
     description: S3 endpoint URL
+  # General configuration
   tv-datamover-max-uploads-pending:
     type: int
     default: 3
