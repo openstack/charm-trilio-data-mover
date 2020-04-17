@@ -1,0 +1,8 @@
+ghost-share:
+  description: "Bind mount NFS share 'host' for secondary Trilio Vault deployment"
+  properties:
+    nfs-shares:
+      type: string
+      description: Exact nfs-shares configuration option from secondary deployment
+  required:
+    - nfs-shares

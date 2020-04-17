@@ -14,8 +14,10 @@
 
 import base64
 import collections
+import os
 
 import charmhelpers.core.hookenv as hookenv
+import charmhelpers.core.host as host
 import charmhelpers.fetch as fetch
 
 import charms_openstack.charm
@@ -23,6 +25,19 @@ import charms_openstack.adapters as os_adapters
 
 
 VALID_BACKUP_TARGETS = ["nfs"]
+TV_MOUNTS = "/var/triliovault-mounts"
+
+
+class NFSShareNotMountedException(Exception):
+    """Signal that the trilio nfs share is not mount"""
+
+    pass
+
+
+class GhostShareAlreadyMountedException(Exception):
+    """Signal that a ghost share is already mounted"""
+
+    pass
 
 
 class TrilioDataMoverCharm(charms_openstack.charm.OpenStackCharm):
@@ -77,10 +92,45 @@ class TrilioDataMoverCharm(charms_openstack.charm.OpenStackCharm):
     def restart_map(self):
         return {self.data_mover_conf: self.services}
 
+    def install(self):
+        self.configure_source()
+        super().install()
+
     def _encode_endpoint(self, backup_endpoint):
         """base64 encode an backup endpoint for cross mounting support"""
         return base64.b64encode(backup_endpoint.encode()).decode()
 
-    def install(self):
-        self.configure_source()
-        super().install()
+    # TODO: refactor into a layer/module
+    def ghost_nfs_share(self, ghost_share):
+        """Bind mount the local units nfs share to another sites location
+
+        :param ghost_share: NFS share URL to ghost
+        :type ghost_share: str
+        """
+        nfs_share_path = os.path.join(
+            TV_MOUNTS, self._encode_endpoint(hookenv.config("nfs-shares"))
+        )
+        ghost_share_path = os.path.join(
+            TV_MOUNTS, self._encode_endpoint(ghost_share)
+        )
+
+        current_mounts = [mount[0] for mount in host.mounts()]
+
+        if nfs_share_path not in current_mounts:
+            # Trilio has not mounted the NFS share so return
+            raise NFSShareNotMountedException(
+                "nfs-shares ({}) not mounted".format(
+                    hookenv.config("nfs-shares")
+                )
+            )
+
+        if ghost_share_path in current_mounts:
+            # bind mount already setup so return
+            raise GhostShareAlreadyMountedException(
+                "ghost mountpoint ({}) already bound".format(ghost_share_path)
+            )
+
+        if not os.path.exists(ghost_share_path):
+            os.mkdir(ghost_share_path)
+
+        host.mount(nfs_share_path, ghost_share_path, options="bind")
