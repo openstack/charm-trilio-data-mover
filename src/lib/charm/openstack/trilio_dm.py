@@ -134,3 +134,9 @@ class TrilioDataMoverCharm(charms_openstack.charm.OpenStackCharm):
             os.mkdir(ghost_share_path)
 
         host.mount(nfs_share_path, ghost_share_path, options="bind")
+
+    def custom_assess_status_check(self):
+        """Check required configuration options are set"""
+        if not hookenv.config("nfs-shares"):
+            return "blocked", "nfs-shares configuration not set"
+        return None, None
