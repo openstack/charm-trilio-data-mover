@@ -40,7 +40,9 @@ class GhostShareAlreadyMountedException(Exception):
     pass
 
 
-class TrilioDataMoverCharm(charms_openstack.charm.OpenStackCharm):
+class TrilioDataMoverBaseCharm(charms_openstack.charm.OpenStackCharm):
+
+    release = "queens"
 
     service_name = name = "trilio-data-mover"
 
@@ -49,17 +51,21 @@ class TrilioDataMoverCharm(charms_openstack.charm.OpenStackCharm):
     data_mover_conf = "/etc/tvault-contego/tvault-contego.conf"
     logrotate_conf = "/etc/logrotate.d/tvault-contego"
 
-    # First release supported
-    release = "stein"
-
     service_type = "data-mover"
     default_service = "tvault-contego"
 
     required_relations = ["amqp"]
 
+    packages = ["tvault-contego", "nfs-common"]
+
     package_codenames = {
-        "tvault-contego": collections.OrderedDict([("3", "stein")]),
-        "python3-tvault-contego": collections.OrderedDict([("3", "stein")]),
+        "tvault-contego": collections.OrderedDict([
+            ("3", "stein")
+        ]),
+        "python3-tvault-contego": collections.OrderedDict([
+            ("3", "stein"),
+            ("4", "train"),
+        ]),
     }
 
     # configuration file permissions
@@ -75,12 +81,6 @@ class TrilioDataMoverCharm(charms_openstack.charm.OpenStackCharm):
         ) as tsources:
             tsources.write(hookenv.config("triliovault-pkg-source"))
         fetch.apt_update(fatal=True)
-
-    @property
-    def packages(self):
-        if hookenv.config("python-version") == 2:
-            return ["tvault-contego", "nfs-common"]
-        return ["python3-tvault-contego", "nfs-common"]
 
     @property
     def services(self):
@@ -140,3 +140,13 @@ class TrilioDataMoverCharm(charms_openstack.charm.OpenStackCharm):
         if not hookenv.config("nfs-shares"):
             return "blocked", "nfs-shares configuration not set"
         return None, None
+
+
+class TrilioDataMoverRockyCharm(TrilioDataMoverBaseCharm):
+
+    release = "rocky"
+
+    packages = [
+        "python3-tvault-contego",
+        "nfs-common"
+    ]

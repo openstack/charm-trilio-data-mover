@@ -21,32 +21,24 @@ import charms_openstack.test_utils as test_utils
 class Helper(test_utils.PatchHelper):
     def setUp(self):
         super().setUp()
-        self.patch_release(trilio_dm.TrilioDataMoverCharm.release)
+        self.patch_release(trilio_dm.TrilioDataMoverRockyCharm.release)
 
 
-class TestTrilioDataMoverCharms(Helper):
-    def test_packages_py2(self):
-        dm_charm = trilio_dm.TrilioDataMoverCharm()
-        self.patch_object(trilio_dm.hookenv, "config")
-        self.config.return_value = 2
-        self.assertEqual(dm_charm.packages, ["tvault-contego", "nfs-common"])
-
-    def test_packages_py3(self):
-        dm_charm = trilio_dm.TrilioDataMoverCharm()
-        self.patch_object(trilio_dm.hookenv, "config")
-        self.config.return_value = 3
+class TestTrilioDataMoverRockyCharms(Helper):
+    def test_packages(self):
+        dm_charm = trilio_dm.TrilioDataMoverRockyCharm()
         self.assertEqual(
             dm_charm.packages, ["python3-tvault-contego", "nfs-common"]
         )
 
     def test_services_nfs(self):
-        dm_charm = trilio_dm.TrilioDataMoverCharm()
+        dm_charm = trilio_dm.TrilioDataMoverRockyCharm()
         self.patch_object(trilio_dm.hookenv, "config")
         self.config.return_value = "nfs"
         self.assertEqual(dm_charm.services, ["tvault-contego"])
 
     def test_services_s3(self):
-        dm_charm = trilio_dm.TrilioDataMoverCharm()
+        dm_charm = trilio_dm.TrilioDataMoverRockyCharm()
         self.patch_object(trilio_dm.hookenv, "config")
         self.config.return_value = "s3"
         self.assertEqual(
@@ -55,7 +47,7 @@ class TestTrilioDataMoverCharms(Helper):
 
 
 # TODO: refactor into a layer/module
-class TestTrilioDataMoverCharmGhostShareAction(Helper):
+class TestTrilioDataMoverRockyCharmGhostShareAction(Helper):
 
     _nfs_shares = "10.20.30.40:/srv/trilioshare"
     _ghost_shares = "50.20.30.40:/srv/trilioshare"
@@ -68,7 +60,7 @@ class TestTrilioDataMoverCharmGhostShareAction(Helper):
         self.patch_object(trilio_dm.os.path, "exists")
         self.patch_object(trilio_dm.os, "mkdir")
 
-        self.trilio_wlm_charm = trilio_dm.TrilioDataMoverCharm()
+        self.trilio_wlm_charm = trilio_dm.TrilioDataMoverRockyCharm()
         self._nfs_path = os.path.join(
             trilio_dm.TV_MOUNTS,
             self.trilio_wlm_charm._encode_endpoint(self._nfs_shares),

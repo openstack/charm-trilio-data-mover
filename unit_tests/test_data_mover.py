@@ -83,6 +83,9 @@ class Test(test_utils.PatchHelper):
         when_patterns = {
             "render_config": ("amqp.available",),
             "default_amqp_connection": ("amqp.connected",),
+            "install_source_changed": (
+                "config.changed.triliovault-pkg-source",
+            )
         }
         when_not_patterns = {}
         # check the when hooks are attached to the expected functions
