@@ -42,9 +42,7 @@ def ghost_share(*args):
 
 # Actions to function mapping, to allow for illegal python action names that
 # can map to a python function.
-ACTIONS = {
-    "ghost-share": ghost_share,
-}
+ACTIONS = {"ghost-share": ghost_share}
 
 
 def main(args):

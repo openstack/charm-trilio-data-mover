@@ -13,7 +13,6 @@
 # limitations under the License.
 
 import base64
-import collections
 import os
 
 import charmhelpers.core.hookenv as hookenv
@@ -23,6 +22,8 @@ import charmhelpers.fetch as fetch
 import charms_openstack.charm
 import charms_openstack.adapters as os_adapters
 
+# select the default release function
+charms_openstack.charm.use_defaults('charm.default-select-release')
 
 VALID_BACKUP_TARGETS = ["nfs"]
 TV_MOUNTS = "/var/triliovault-mounts"
@@ -57,16 +58,6 @@ class TrilioDataMoverBaseCharm(charms_openstack.charm.OpenStackCharm):
     required_relations = ["amqp"]
 
     packages = ["tvault-contego", "nfs-common"]
-
-    package_codenames = {
-        "tvault-contego": collections.OrderedDict([
-            ("3", "stein")
-        ]),
-        "python3-tvault-contego": collections.OrderedDict([
-            ("3", "stein"),
-            ("4", "train"),
-        ]),
-    }
 
     # configuration file permissions
     user = "root"
@@ -146,7 +137,4 @@ class TrilioDataMoverRockyCharm(TrilioDataMoverBaseCharm):
 
     release = "rocky"
 
-    packages = [
-        "python3-tvault-contego",
-        "nfs-common"
-    ]
+    packages = ["python3-tvault-contego", "nfs-common"]
