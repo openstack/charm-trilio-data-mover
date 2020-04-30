@@ -17,6 +17,7 @@ import os
 
 import charmhelpers.core.hookenv as hookenv
 import charmhelpers.core.host as host
+import charmhelpers.contrib.openstack.utils as os_utils
 import charmhelpers.fetch as fetch
 
 import charms_openstack.charm
@@ -66,6 +67,10 @@ class TrilioDataMoverBaseCharm(charms_openstack.charm.OpenStackCharm):
     # Setting an empty source_config_key activates special handling of release
     # selection suitable for subordinate charms
     source_config_key = ''
+
+    # Use nova-common package to drive OpenStack Release versioning.
+    release_pkg = "nova-common"
+    package_codenames = os_utils.PACKAGE_CODENAMES
 
     def get_amqp_credentials(self):
         return ("datamover", "openstack")
