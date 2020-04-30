@@ -63,6 +63,10 @@ class TrilioDataMoverBaseCharm(charms_openstack.charm.OpenStackCharm):
     user = "root"
     group = "nova"
 
+    # Setting an empty source_config_key activates special handling of release
+    # selection suitable for subordinate charms
+    source_config_key = ''
+
     def get_amqp_credentials(self):
         return ("datamover", "openstack")
 
