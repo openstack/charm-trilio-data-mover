@@ -23,6 +23,8 @@ requires:
   juju-info:
     interface: juju-info
     scope: container
+  ceph:
+    interface: ceph-client
 provides:
   data-mover:
     interface: data-mover

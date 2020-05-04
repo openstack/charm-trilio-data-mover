@@ -18,9 +18,7 @@ import charms.reactive as reactive
 import charm.openstack.trilio_dm as trilio_dm  # noqa
 
 charm.use_defaults(
-    "charm.installed",
-    "config.changed",
-    "update-status",
+    "charm.installed", "config.changed", "update-status",
 )
 
 
@@ -29,9 +27,12 @@ def render_config(*args):
     """Render the configuration for charm when all the interfaces are
     available.
     """
-    with charm.provide_charm_instance() as charm_class:
-        charm_class.render_with_interfaces(args)
-        charm_class.assess_status()
+    ceph = reactive.endpoint_from_flag("ceph.available")
+    if ceph:
+        args = (ceph,) + args
+    with charm.provide_charm_instance() as charm_instance:
+        charm_instance.render_with_interfaces(args)
+        charm_instance.assess_status()
     reactive.set_state("config.rendered")
 
 
@@ -43,13 +44,28 @@ def default_amqp_connection(amqp):
     This requires that the charm implements get_amqp_credentials() to
     provide a tuple of the (user, vhost) for the amqp server
     """
-    with charm.provide_charm_instance() as instance:
-        user, vhost = instance.get_amqp_credentials()
+    with charm.provide_charm_instance() as charm_instance:
+        user, vhost = charm_instance.get_amqp_credentials()
         amqp.request_access(username=user, vhost=vhost)
-        instance.assess_status()
+        charm_instance.assess_status()
 
 
 @reactive.when("config.changed.triliovault-pkg-source")
 def install_source_changed():
     """Trigger re-install of charm if source configuration options change"""
     reactive.clear_flag("charm.installed")
+
+
+@reactive.when_not("ceph.access.req.sent")
+@reactive.when("ceph.connected")
+def ceph_connected(ceph):
+    with charm.provide_charm_instance() as charm_instance:
+        charm_instance.request_access_to_groups(ceph)
+        reactive.set_flag("ceph.access.req.sent")
+
+
+@reactive.when("ceph.available")
+def configure_ceph(ceph):
+    with charm.provide_charm_instance() as charm_instance:
+        charm_instance.configure_ceph_keyring(ceph.key())
+        charm_instance.assess_status()

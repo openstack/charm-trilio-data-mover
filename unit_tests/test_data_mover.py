@@ -85,9 +85,19 @@ class Test(test_utils.PatchHelper):
             "default_amqp_connection": ("amqp.connected",),
             "install_source_changed": (
                 "config.changed.triliovault-pkg-source",
-            )
+            ),
+            "configure_ceph": (
+                "ceph.available",
+            ),
+            "ceph_connected": (
+                "ceph.connected",
+            ),
         }
-        when_not_patterns = {}
+        when_not_patterns = {
+            "ceph_connected": (
+                "ceph.access.req.sent",
+            ),
+        }
         # check the when hooks are attached to the expected functions
         for t, p in [
             (_when_args, when_patterns),

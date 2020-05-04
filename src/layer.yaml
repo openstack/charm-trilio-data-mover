@@ -1,1 +1,5 @@
-includes: ['layer:openstack', 'interface:rabbitmq']
+includes: [
+   'layer:openstack',
+   'interface:rabbitmq',
+   'interface:ceph-client',
+ ]
