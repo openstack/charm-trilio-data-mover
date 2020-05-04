@@ -1,0 +1,36 @@
+charm_name: trilio-data-mover
+tests:
+  - zaza.openstack.charm_tests.trilio.tests.TrilioDataMoverTest
+configure:
+  - zaza.openstack.charm_tests.trilio.setup.basic_setup
+  - zaza.openstack.charm_tests.vault.setup.auto_initialize
+  - zaza.openstack.charm_tests.glance.setup.add_cirros_image
+  - zaza.openstack.charm_tests.glance.setup.add_lts_image
+  - zaza.openstack.charm_tests.neutron.setup.basic_overcloud_network
+  - zaza.openstack.charm_tests.nova.setup.create_flavors
+  - zaza.openstack.charm_tests.nova.setup.manage_ssh_key
+gate_bundles:
+  - bionic-queens-ssl
+  - bionic-stein-ssl
+  - bionic-train-ssl
+smoke_bundles:
+  - bionic-train-ssl
+target_deploy_status:
+  vault:
+    workload-status: blocked
+    workload-status-message: "Vault needs to be initialized"
+  ceph-osd:
+    workload-status: waiting
+    workload-status-message: "Incomplete relation: vault"
+  ceph-mon:
+    workload-status: waiting
+    workload-status-message: "Monitor bootstrapped but waiting for number of OSDs to reach expected-osd-count (3)"
+  cinder-ceph:
+    workload-status: waiting
+    workload-status-message: "Incomplete relations: ceph"
+  trilio-wlm:
+    workload-status: blocked
+    workload-status-message: "nfs-shares configuration not set"
+  trilio-data-mover:
+    workload-status: blocked
+    workload-status-message: "nfs-shares configuration not set"

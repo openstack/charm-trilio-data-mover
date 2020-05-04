@@ -38,6 +38,11 @@ def ceph_dir(ceph):
     return os.path.join("/var/lib/charm", hookenv.service_name())
 
 
+@os_adapters.config_property
+def rbd_user(ceph):
+    return hookenv.service_name()
+
+
 class NFSShareNotMountedException(Exception):
     """Signal that the trilio nfs share is not mount"""
 
