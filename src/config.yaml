@@ -3,10 +3,10 @@ options:
   python-version:
     type: int
     default: 3
-    description: Openstack base python version(2 or 3)
+    description: THIS OPTION IS DEPRECATED AND HAS NO EFFECT
   triliovault-pkg-source:
     type: string
-    default: "deb [trusted=yes] https://apt.fury.io/triliodata-3-4/ /"
+    default: "deb [trusted=yes] https://apt.fury.io/triliovault-python3/ /"
     description: Repository address of triliovault packages
   backup-target-type:
     type: string

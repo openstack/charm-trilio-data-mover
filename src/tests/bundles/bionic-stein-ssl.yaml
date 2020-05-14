@@ -169,25 +169,15 @@ applications:
     num_units: 1
   trilio-data-mover:
     charm: ../../../trilio-data-mover
-    options:
-      triliovault-pkg-source: "deb [trusted=yes] https://apt.fury.io/triliovault-python3/ /"
   trilio-dm-api:
     charm: cs:~openstack-charmers-next/trilio-dm-api
     num_units: 1
-    options:
-      openstack-origin: cloud:bionic-train
-      triliovault-pkg-source: "deb [trusted=yes] https://apt.fury.io/triliovault-python3/ /"
   trilio-horizon-plugin:
     charm: cs:~openstack-charmers-next/trilio-horizon-plugin
-    options:
-      triliovault-pkg-source: "deb [trusted=yes] https://apt.fury.io/triliovault-python3/ /"
   trilio-wlm:
     charm: cs:~openstack-charmers-next/trilio-wlm
     series: bionic
     num_units: 1
-    options:
-      openstack-origin: cloud:bionic-train
-      triliovault-pkg-source: "deb [trusted=yes] https://apt.fury.io/triliovault-python3/ /"
   ceph-mon:
     charm: cs:~openstack-charmers-next/ceph-mon
     num_units: 3
