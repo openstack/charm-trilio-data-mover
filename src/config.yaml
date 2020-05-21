@@ -6,7 +6,7 @@ options:
     description: THIS OPTION IS DEPRECATED AND HAS NO EFFECT
   triliovault-pkg-source:
     type: string
-    default: "deb [trusted=yes] https://apt.fury.io/triliovault-python3/ /"
+    default: "deb [trusted=yes] https://apt.fury.io/triliodata-4-0/ /"
     description: Repository address of triliovault packages
   backup-target-type:
     type: string
