@@ -54,6 +54,7 @@ def default_amqp_connection(amqp):
 def install_source_changed():
     """Trigger re-install of charm if source configuration options change"""
     reactive.clear_flag("charm.installed")
+    reactive.set_flag("upgrade.triliovault")
 
 
 @reactive.when_not("ceph.access.req.sent")
