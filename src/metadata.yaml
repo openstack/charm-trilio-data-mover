@@ -1,4 +1,3 @@
----
 name: trilio-data-mover
 display-name: TrilioVault Data Mover
 summary: TrilioVault Data Mover Service
@@ -11,12 +10,13 @@ description: |
   forms part of the TrilioVault solution.
 subordinate: true
 tags:
-  - openstack
-  - storage
-  - backup
+- openstack
+- storage
+- backup
 series:
-  - xenial
-  - bionic
+- xenial
+- bionic
+- groovy
 requires:
   amqp:
     interface: rabbitmq
