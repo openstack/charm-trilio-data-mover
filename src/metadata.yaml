@@ -16,7 +16,6 @@ tags:
 series:
 - xenial
 - bionic
-- groovy
 requires:
   amqp:
     interface: rabbitmq
