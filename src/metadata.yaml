@@ -16,6 +16,8 @@ tags:
 series:
 - xenial
 - bionic
+- focal
+- groovy
 requires:
   amqp:
     interface: rabbitmq
