@@ -102,48 +102,48 @@ relations:
   - ceph-mon:client
 applications:
   glance:
-    charm: cs:~openstack-charmers-next/glance
+    charm: cs:~openstack-charmers/glance
     num_units: 1
   cinder:
-    charm: cs:~openstack-charmers-next/cinder
+    charm: cs:~openstack-charmers/cinder
     num_units: 1
     options:
       block-device: "None"
       glance-api-version: 2
   keystone:
-    charm: cs:~openstack-charmers-next/keystone
+    charm: cs:~openstack-charmers/keystone
     series: bionic
     num_units: 1
     options:
       admin-password: openstack
   mysql:
-    charm: cs:~openstack-charmers-next/percona-cluster
+    charm: cs:~openstack-charmers/percona-cluster
     num_units: 1
     options:
       innodb-buffer-pool-size: 256M
       max-connections: 1000
   neutron-api:
-    charm: cs:~openstack-charmers-next/neutron-api
+    charm: cs:~openstack-charmers/neutron-api
     num_units: 1
     options:
       flat-network-providers: physnet1
       neutron-security-groups: true
   neutron-gateway:
-    charm: cs:~openstack-charmers-next/neutron-gateway
+    charm: cs:~openstack-charmers/neutron-gateway
     num_units: 1
     options:
       bridge-mappings: physnet1:br-ex
   neutron-openvswitch:
-    charm: cs:~openstack-charmers-next/neutron-openvswitch
+    charm: cs:~openstack-charmers/neutron-openvswitch
     num_units: 0
   nova-cloud-controller:
-    charm: cs:~openstack-charmers-next/nova-cloud-controller
+    charm: cs:~openstack-charmers/nova-cloud-controller
     num_units: 1
     options:
       network-manager: Neutron
       debug: true
   nova-compute:
-    charm: cs:~openstack-charmers-next/nova-compute
+    charm: cs:~openstack-charmers/nova-compute
     num_units: 3
     constraints: mem=4G
     options:
@@ -157,26 +157,26 @@ applications:
       # Allow for more retries when testing ontop of openstack
       config-flags: block_device_allocate_retries=120
   rabbitmq-server:
-    charm: cs:~openstack-charmers-next/rabbitmq-server
+    charm: cs:~openstack-charmers/rabbitmq-server
     num_units: 1
   trilio-data-mover:
     charm: ../../../trilio-data-mover
   trilio-dm-api:
-    charm: cs:~openstack-charmers-next/trilio-dm-api
+    charm: cs:~openstack-charmers/trilio-dm-api
     num_units: 1
   trilio-horizon-plugin:
-    charm: cs:~openstack-charmers-next/trilio-horizon-plugin
+    charm: cs:~openstack-charmers/trilio-horizon-plugin
   trilio-wlm:
-    charm: cs:~openstack-charmers-next/trilio-wlm
+    charm: cs:~openstack-charmers/trilio-wlm
     series: bionic
     num_units: 1
   ceph-mon:
-    charm: cs:~openstack-charmers-next/ceph-mon
+    charm: cs:~openstack-charmers/ceph-mon
     num_units: 3
     options:
       expected-osd-count: 3
   ceph-osd:
-    charm: cs:~openstack-charmers-next/ceph-osd
+    charm: cs:~openstack-charmers/ceph-osd
     constraints: mem=1G
     num_units: 3
     options:
@@ -185,15 +185,15 @@ applications:
     storage:
       osd-devices:  cinder,40G
   cinder-ceph:
-    charm: cs:~openstack-charmers-next/cinder-ceph
+    charm: cs:~openstack-charmers/cinder-ceph
   vault:
     num_units: 1
-    charm: cs:~openstack-charmers-next/vault
+    charm: cs:~openstack-charmers/vault
   nfs-server-test-fixture:
     charm: cs:~openstack-charmers-next/nfs-server-test-fixture
     num_units: 1
     storage:
       share: cinder,40G
   openstack-dashboard:
-    charm: cs:~openstack-charmers-next/openstack-dashboard
+    charm: cs:~openstack-charmers/openstack-dashboard
     num_units: 1
