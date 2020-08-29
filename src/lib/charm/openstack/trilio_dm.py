@@ -133,6 +133,9 @@ class TrilioDataMoverBaseCharm(
             #       charm specific location for qemu commands to work
             if not os.path.exists(ceph_keyring):
                 os.symlink(keyring_absolute_path, ceph_keyring)
+        # NOTE: ensure /var/lib/charm is world readable - this will be the
+        #       case with Python >= 3.7 but <= 3.6 has different behaviour
+        os.chmod('/var/lib/charm', 0o755)
         return keyring_absolute_path
 
     def get_amqp_credentials(self):
