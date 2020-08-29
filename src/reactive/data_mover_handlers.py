@@ -68,5 +68,5 @@ def ceph_connected(ceph):
 @reactive.when("ceph.available")
 def configure_ceph(ceph):
     with charm.provide_charm_instance() as charm_instance:
-        charm_instance.configure_ceph_keyring(ceph.key())
+        charm_instance.configure_ceph_keyring(ceph.key)
         charm_instance.assess_status()
