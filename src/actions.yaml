@@ -3,6 +3,6 @@ ghost-share:
   properties:
     nfs-shares:
       type: string
-      description: Exact nfs-shares configuration option from secondary deployment
+      description: Comma separated nfs-shares configuration option from secondary deployment. NFS shares must be provided in the same order as the nfs-shares configuration option for the local deployment.
   required:
     - nfs-shares
