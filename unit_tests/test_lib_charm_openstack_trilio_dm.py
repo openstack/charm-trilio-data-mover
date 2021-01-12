@@ -26,7 +26,8 @@ class TestTrilioDataMoverRockyCharms(Helper):
     def test_packages(self):
         dm_charm = trilio_dm.TrilioDataMoverRockyCharm()
         self.assertEqual(
-            dm_charm.packages, ["python3-tvault-contego", "nfs-common"]
+            dm_charm.packages,
+            ["python3-tvault-contego", "nfs-common", "contego"]
         )
 
     def test_services_nfs(self):

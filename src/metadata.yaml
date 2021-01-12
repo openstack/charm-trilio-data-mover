@@ -26,6 +26,8 @@ requires:
     scope: container
   ceph:
     interface: ceph-client
+  shared-db:
+    interface: mysql-shared
 provides:
   data-mover:
     interface: data-mover

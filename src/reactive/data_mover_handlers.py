@@ -19,9 +19,11 @@ import charm.openstack.trilio_dm as trilio_dm  # noqa
 
 charm.use_defaults(
     "charm.installed", "config.changed", "update-status",
+    "shared-db.connected",
 )
 
 
+@reactive.when("shared-db.available")
 @reactive.when("amqp.available")
 def render_config(*args):
     """Render the configuration for charm when all the interfaces are
@@ -34,6 +36,22 @@ def render_config(*args):
         charm_instance.render_with_interfaces(args)
         charm_instance.assess_status()
     reactive.set_state("config.rendered")
+
+
+@reactive.when('shared-db.connected')
+def default_setup_database(database):
+    """Handle the default database connection setup
+
+    This requires that the charm implements get_database_setup() to provide
+    a list of dictionaries;
+    [{'database': ..., 'username': ..., 'hostname': ..., 'prefix': ...}]
+
+    The prefix can be missing: it defaults to None.
+    """
+    with charm.provide_charm_instance() as instance:
+        for db in instance.get_database_setup():
+            database.configure(**db)
+        instance.assess_status()
 
 
 # NOTE(jamespage): default handler is in api layer which is to much

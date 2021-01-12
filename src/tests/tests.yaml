@@ -27,10 +27,13 @@ target_deploy_status:
     workload-status-message: "Monitor bootstrapped but waiting for number of OSDs to reach expected-osd-count (3)"
   cinder-ceph:
     workload-status: waiting
-    workload-status-message: "Incomplete relations: ceph"
+    workload-status-message: "Ceph broker request incomplete"
   trilio-wlm:
     workload-status: blocked
     workload-status-message: "nfs-shares configuration not set"
   trilio-data-mover:
     workload-status: blocked
     workload-status-message: "nfs-shares configuration not set"
+  glance:
+    workload-status: waiting
+    workload-status-message: "Incomplete relations: storage-backend"
