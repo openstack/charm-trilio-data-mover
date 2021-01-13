@@ -81,8 +81,9 @@ class Test(test_utils.PatchHelper):
         # are meaningful for this interface: this is to handle regressions.
         # The keys are the function names that the hook attaches to.
         when_patterns = {
-            "render_config": ("amqp.available",),
+            "render_config": ("amqp.available", "shared-db.available"),
             "default_amqp_connection": ("amqp.connected",),
+            "default_setup_database": ("shared-db.connected",),
             "install_source_changed": (
                 "config.changed.triliovault-pkg-source",
             ),

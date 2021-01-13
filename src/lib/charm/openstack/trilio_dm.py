@@ -21,13 +21,28 @@ import charms.reactive as reactive
 
 import charms_openstack.charm
 import charms_openstack.plugins
+import charms_openstack.plugins.trilio
 import charms_openstack.adapters as os_adapters
 
-# select the default release function
-charms_openstack.charm.use_defaults("charm.default-select-release")
+
+charms_openstack.plugins.trilio.make_trilio_handlers()
+
 
 VALID_BACKUP_TARGETS = ["nfs"]
 TV_MOUNTS = "/var/triliovault-mounts"
+
+
+class DataMoverDBAdapter(os_adapters.DatabaseRelationAdapter):
+    """Get database URIs for the two nova databases"""
+
+    @property
+    def driver(self):
+        return 'mysql+pymysql'
+
+    @property
+    def dmapi_uri(self):
+        """URI for dmapi DB"""
+        return self.get_uri(prefix="dmapi")
 
 
 @os_adapters.config_property
@@ -60,6 +75,7 @@ class DataMoverRelationAdapaters(os_adapters.OpenStackAPIRelationAdapters):
     relation_adapters = {
         "ceph": charms_openstack.plugins.CephRelationAdapter,
         "amqp": os_adapters.RabbitMQRelationAdapter,
+        "shared_db": DataMoverDBAdapter,
     }
 
 
@@ -70,6 +86,7 @@ class TrilioDataMoverBaseCharm(
 ):
 
     release = "queens"
+    trilio_release = "4.0"
 
     service_name = name = "trilio-data-mover"
 
@@ -81,9 +98,9 @@ class TrilioDataMoverBaseCharm(
     service_type = "data-mover"
     default_service = "tvault-contego"
 
-    required_relations = ["amqp"]
+    required_relations = ["amqp", "shared-db"]
 
-    packages = ["tvault-contego", "nfs-common"]
+    packages = ["tvault-contego", "nfs-common", "contego"]
 
     # configuration file permissions
     user = "root"
@@ -94,7 +111,7 @@ class TrilioDataMoverBaseCharm(
     source_config_key = ""
 
     # Use nova-common package to drive OpenStack Release versioning.
-    release_pkg = "nova-common"
+    os_release_pkg = "nova-common"
     package_codenames = os_utils.PACKAGE_CODENAMES
 
     # Set ceph keyring prefix to charm specific location
@@ -141,6 +158,15 @@ class TrilioDataMoverBaseCharm(
     def get_amqp_credentials(self):
         return ("datamover", "openstack")
 
+    def get_database_setup(self):
+        return [
+            {
+                "database": "dmapi",
+                "username": "dmapi",
+                "prefix": "dmapi",
+            },
+        ]
+
     @property
     def services(self):
         if hookenv.config("backup-target-type") == "s3":
@@ -177,9 +203,18 @@ class TrilioDataMoverBaseCharm(
                 permission="rwx",
             )
 
+    @classmethod
+    def trilio_version_package(cls):
+        return 'tvault-contego'
+
 
 class TrilioDataMoverRockyCharm(TrilioDataMoverBaseCharm):
 
     release = "rocky"
+    trilio_release = "4.0"
 
-    packages = ["python3-tvault-contego", "nfs-common"]
+    packages = ["python3-tvault-contego", "nfs-common", "contego"]
+
+    @classmethod
+    def trilio_version_package(cls):
+        return 'python3-tvault-contego'

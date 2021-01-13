@@ -2,4 +2,5 @@ includes: [
    'layer:openstack',
    'interface:rabbitmq',
    'interface:ceph-client',
+   'interface:mysql-shared',
  ]
