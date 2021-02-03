@@ -213,6 +213,9 @@ class TrilioDataMoverRockyCharm(TrilioDataMoverBaseCharm):
     release = "rocky"
     trilio_release = "4.0"
 
+    # Python version used to execute installed workload
+    python_version = 3
+
     packages = ["python3-tvault-contego", "nfs-common", "contego"]
 
     @classmethod
