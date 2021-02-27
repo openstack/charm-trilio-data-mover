@@ -3,14 +3,19 @@
       - charm-unit-jobs
     check:
       jobs:
-      - bionic-queens-ssl
-      - bionic-stein-ssl
-      - bionic-train-ssl
+      - bionic-stein-40
+      - bionic-stein-41
+      - bionic-train-40
+      - bionic-train-41
+      - bionic-ussuri-41
+      - focal-ussuri-41
+      - bionic-queens-40
+      - bionic-queens-41
     vars:
       needs_charm_build: true
       charm_build_name: trilio-data-mover
 - job:
-    name: bionic-train-ssl
+    name: focal-ussuri-41
     parent: func-target
     dependencies:
       - osci-lint
@@ -19,17 +24,47 @@
       - tox-py37
       - tox-py38
     vars:
-      tox_extra_args: bionic-train-ssl
+      tox_extra_args: focal-ussuri-41
 - job:
-    name: bionic-stein-ssl
+    name: bionic-queens-40
     parent: func-target
     dependencies: &smoke-jobs
-      - bionic-train-ssl
+      - focal-ussuri-41
     vars:
-      tox_extra_args: bionic-stein-ssl
+      tox_extra_args: bionic-queens-40
 - job:
-    name: bionic-queens-ssl
+    name: bionic-queens-41
     parent: func-target
     dependencies: *smoke-jobs
     vars:
-      tox_extra_args: bionic-queens-ssl
+      tox_extra_args: bionic-queens-41
+- job:
+    name: bionic-stein-40
+    parent: func-target
+    dependencies: *smoke-jobs
+    vars:
+      tox_extra_args: bionic-stein-40
+- job:
+    name: bionic-stein-41
+    parent: func-target
+    dependencies: *smoke-jobs
+    vars:
+      tox_extra_args: bionic-stein-41
+- job:
+    name: bionic-train-40
+    parent: func-target
+    dependencies: *smoke-jobs
+    vars:
+      tox_extra_args: bionic-train-40
+- job:
+    name: bionic-train-41
+    parent: func-target
+    dependencies: *smoke-jobs
+    vars:
+      tox_extra_args: bionic-train-41
+- job:
+    name: bionic-ussuri-41
+    parent: func-target
+    dependencies: *smoke-jobs
+    vars:
+      tox_extra_args: bionic-ussuri-41

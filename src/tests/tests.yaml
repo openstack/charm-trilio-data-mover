@@ -10,11 +10,16 @@ configure:
   - zaza.openstack.charm_tests.nova.setup.create_flavors
   - zaza.openstack.charm_tests.nova.setup.manage_ssh_key
 gate_bundles:
-  - bionic-queens-ssl
-  - bionic-stein-ssl
-  - bionic-train-ssl
+  - bionic-stein-40
+  - bionic-stein-41
+  - bionic-train-40
+  - bionic-train-41
+  - bionic-ussuri-41
+  - focal-ussuri-41
+  - bionic-queens-40
+  - bionic-queens-41
 smoke_bundles:
-  - bionic-train-ssl
+  - bionic-train-40
 target_deploy_status:
   vault:
     workload-status: blocked
