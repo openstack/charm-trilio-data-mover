@@ -39,7 +39,7 @@ class TestTrilioDataMoverRockyCharms(Helper):
     def test_services_s3(self):
         dm_charm = trilio_dm.TrilioDataMoverRockyCharm()
         self.patch_object(trilio_dm.hookenv, "config")
-        self.config.return_value = "s3"
+        self.config.return_value = "experimental-s3"
         self.assertEqual(
             dm_charm.services, ["tvault-contego", "tvault-object-store"]
         )

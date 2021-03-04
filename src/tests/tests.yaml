@@ -1,15 +1,26 @@
 charm_name: trilio-data-mover
 tests:
-  - zaza.openstack.charm_tests.trilio.tests.TrilioDataMoverTest
+  - zaza.openstack.charm_tests.trilio.tests.TrilioDataMoverNFSTest
+  - s3:
+    - zaza.openstack.charm_tests.trilio.tests.TrilioDataMoverS3Test
 configure:
-  - zaza.openstack.charm_tests.trilio.setup.basic_setup
+  - s3:
+    - zaza.openstack.charm_tests.vault.setup.auto_initialize
+    - zaza.openstack.charm_tests.trilio.setup.basic_setup
+    - zaza.openstack.charm_tests.glance.setup.add_cirros_image
+    - zaza.openstack.charm_tests.glance.setup.add_lts_image
+    - zaza.openstack.charm_tests.neutron.setup.basic_overcloud_network
+    - zaza.openstack.charm_tests.nova.setup.create_flavors
+    - zaza.openstack.charm_tests.nova.setup.manage_ssh_key
   - zaza.openstack.charm_tests.vault.setup.auto_initialize
+  - zaza.openstack.charm_tests.trilio.setup.basic_setup
   - zaza.openstack.charm_tests.glance.setup.add_cirros_image
   - zaza.openstack.charm_tests.glance.setup.add_lts_image
   - zaza.openstack.charm_tests.neutron.setup.basic_overcloud_network
   - zaza.openstack.charm_tests.nova.setup.create_flavors
   - zaza.openstack.charm_tests.nova.setup.manage_ssh_key
 gate_bundles:
+  - s3: bionic-train-41-s3
   - bionic-stein-40
   - bionic-stein-41
   - bionic-train-40
@@ -35,10 +46,13 @@ target_deploy_status:
     workload-status-message: "Ceph broker request incomplete"
   trilio-wlm:
     workload-status: blocked
-    workload-status-message: "nfs-shares configuration not set"
+    workload-status-message-regex: "configuration not set|Unit is ready"
   trilio-data-mover:
     workload-status: blocked
-    workload-status-message: "nfs-shares configuration not set"
+    workload-status-message-regex: "configuration not set|Unit is ready"
   glance:
     workload-status: waiting
     workload-status-message: "Incomplete relations: storage-backend"
+  ceph-radosgw:
+    workload-status: waiting
+    workload-status-message: "Incomplete relations: mon"

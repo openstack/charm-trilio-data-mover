@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import copy
 import os
 
 import charmhelpers.core.hookenv as hookenv
@@ -43,6 +44,14 @@ class DataMoverDBAdapter(os_adapters.DatabaseRelationAdapter):
     def dmapi_uri(self):
         """URI for dmapi DB"""
         return self.get_uri(prefix="dmapi")
+
+
+@charms_openstack.adapters.config_property
+def translated_backup_target_type(cls):
+    _type = hookenv.config("backup-target-type").lower()
+    if _type == "experimental-s3":
+        return 's3'
+    return _type
 
 
 @os_adapters.config_property
@@ -94,13 +103,14 @@ class TrilioDataMoverBaseCharm(
 
     data_mover_conf = "/etc/tvault-contego/tvault-contego.conf"
     logrotate_conf = "/etc/logrotate.d/tvault-contego"
+    object_store_conf = "/etc/tvault-object-store/tvault-object-store.conf"
 
     service_type = "data-mover"
     default_service = "tvault-contego"
 
     required_relations = ["amqp", "shared-db"]
 
-    packages = ["tvault-contego", "nfs-common", "contego"]
+    base_packages = ["tvault-contego", "nfs-common", "contego"]
 
     # configuration file permissions
     user = "root"
@@ -113,6 +123,26 @@ class TrilioDataMoverBaseCharm(
     # Use nova-common package to drive OpenStack Release versioning.
     os_release_pkg = "nova-common"
     package_codenames = os_utils.PACKAGE_CODENAMES
+
+    @property
+    def backup_target_type(self):
+        # The main purpose of this property is to translate experimental-s3
+        # to s3 and s3 to UNKNOWN. This forces the deployer to
+        # use 'experimental-s3' for s3 support but the code can stay clean and
+        # refer to s3.
+        _type = hookenv.config("backup-target-type").lower()
+        if _type == 'experimental-s3':
+            return 's3'
+        if _type == 'nfs':
+            return 'nfs'
+        return 'UNKNOWN'
+
+    @property
+    def packages(self):
+        _pkgs = copy.deepcopy(self.base_packages)
+        if self.backup_target_type == 's3':
+            _pkgs.append('python3-s3-fuse-plugin')
+        return _pkgs
 
     # Set ceph keyring prefix to charm specific location
     @property
@@ -169,25 +199,42 @@ class TrilioDataMoverBaseCharm(
 
     @property
     def services(self):
-        if hookenv.config("backup-target-type") == "s3":
+        if self.backup_target_type == "s3":
             return ["tvault-contego", "tvault-object-store"]
         return ["tvault-contego"]
 
     @property
     def restart_map(self):
-        if reactive.flags.is_flag_set("ceph.available"):
-            return {
-                self.data_mover_conf: self.services,
-                self.ceph_conf: self.services,
-            }
-        return {
+        _restart_map = {
             self.data_mover_conf: self.services,
         }
+        if reactive.flags.is_flag_set("ceph.available"):
+            _restart_map[self.ceph_conf] = self.services
+        if self.backup_target_type == 's3':
+            _restart_map[self.object_store_conf] = ['tvault-object-store']
+        return _restart_map
 
     def custom_assess_status_check(self):
         """Check required configuration options are set"""
-        if not hookenv.config("nfs-shares"):
-            return "blocked", "nfs-shares configuration not set"
+        check_config_set = []
+        if self.backup_target_type == "nfs":
+            check_config_set = ['nfs-shares']
+        elif self.backup_target_type == "s3":
+            check_config_set = [
+                "tv-s3-secret-key",
+                "tv-s3-access-key",
+                "tv-s3-region-name",
+                "tv-s3-bucket",
+                "tv-s3-endpoint-url"]
+        unset_config = [c for c in check_config_set if not hookenv.config(c)]
+        if unset_config:
+            return "blocked", "{} configuration not set".format(
+                ', '.join(unset_config))
+        # For s3 support backup-target-type should be set to 'experimental-s3'
+        # as s3 support is pre-production. The self.backup_target_type
+        # property will do any transaltion needed.
+        if self.backup_target_type not in ["nfs", "s3"]:
+            return "blocked", "Backup target type not supported"
         return None, None
 
     def request_access_to_groups(self, ceph):
@@ -216,7 +263,7 @@ class TrilioDataMoverRockyCharm(TrilioDataMoverBaseCharm):
     # Python version used to execute installed workload
     python_version = 3
 
-    packages = ["python3-tvault-contego", "nfs-common", "contego"]
+    base_packages = ["python3-tvault-contego", "nfs-common", "contego"]
 
     @classmethod
     def trilio_version_package(cls):
