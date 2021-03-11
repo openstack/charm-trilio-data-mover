@@ -1,0 +1,35 @@
+- project:
+    templates:
+      - charm-unit-jobs
+    check:
+      jobs:
+      - bionic-queens-ssl
+      - bionic-stein-ssl
+      - bionic-train-ssl
+    vars:
+      needs_charm_build: true
+      charm_build_name: trilio-data-mover
+- job:
+    name: bionic-train-ssl
+    parent: func-target
+    dependencies:
+      - osci-lint
+      - tox-py35
+      - tox-py36
+      - tox-py37
+      - tox-py38
+    vars:
+      tox_extra_args: bionic-train-ssl
+- job:
+    name: bionic-stein-ssl
+    parent: func-target
+    dependencies: &smoke-jobs
+      - bionic-train-ssl
+    vars:
+      tox_extra_args: bionic-stein-ssl
+- job:
+    name: bionic-queens-ssl
+    parent: func-target
+    dependencies: *smoke-jobs
+    vars:
+      tox_extra_args: bionic-queens-ssl
