@@ -12,8 +12,9 @@ Steps to deploy the charm:
     juju deploy trilio-data-mover --config user-config.yaml
     juju deploy nova-compute
     juju deploy rabbitmq-server
-    juju add-relation trilio-data-mover rabbitmq-server
-    juju add-relation trilio-data-mover nova-compute
+    juju add-relation trilio-data-mover:amqp rabbitmq-server:amqp
+    juju add-relation trilio-data-mover:juju-info nova-compute:juju-info
+    juju add-relation trilio-data-mover:shared-db percona-cluster:shared-db
 
 # Configuration
 
