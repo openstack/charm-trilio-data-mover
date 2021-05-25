@@ -12,6 +12,7 @@
       - bionic-queens-40
       - bionic-queens-41
       - bionic-train-41-s3
+      - focal-ussuri-41-s3
     vars:
       needs_charm_build: true
       charm_build_name: trilio-data-mover
@@ -75,3 +76,9 @@
     dependencies: *smoke-jobs
     vars:
       tox_extra_args: bionic-train-41-s3
+- job:
+    name: focal-ussuri-41-s3
+    parent: func-target
+    dependencies: *smoke-jobs
+    vars:
+      tox_extra_args: focal-ussuri-41-s3

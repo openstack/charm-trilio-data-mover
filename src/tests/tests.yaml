@@ -21,6 +21,7 @@ configure:
   - zaza.openstack.charm_tests.nova.setup.manage_ssh_key
 gate_bundles:
   - s3: bionic-train-41-s3
+  - s3: focal-ussuri-41-s3
   - bionic-stein-40
   - bionic-stein-41
   - bionic-train-40
