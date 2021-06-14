@@ -1,0 +1,3 @@
+{% if options.trilio_s3_cert_config.cert_data -%}
+{{ options.trilio_s3_cert_config.cert_data }}
+{%- endif -%}
