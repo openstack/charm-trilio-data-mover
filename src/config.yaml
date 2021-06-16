@@ -63,3 +63,10 @@ options:
     type: int
     default: 600
     description: qemu_agent_ping_timeout parameter value in /etc/tvault-contego/tvault-contego.conf
+  cinder-http-retries:
+    type: int
+    default: 10
+    description: |
+      This is the number of times datamover will try to connect to
+      the cinder service.
+      This option is ignored if Trilio is before 4.1.94
