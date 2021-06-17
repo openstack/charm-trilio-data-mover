@@ -212,6 +212,9 @@ class TrilioDataMoverBaseCharm(
             _restart_map[self.ceph_conf] = self.services
         if self.backup_target_type == 's3':
             _restart_map[self.object_store_conf] = ['tvault-object-store']
+            _restart_map[
+                charms_openstack.plugins.trilio.S3_SSL_CERT_FILE] = [
+                    'tvault-object-store']
         return _restart_map
 
     def custom_assess_status_check(self):

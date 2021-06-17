@@ -50,6 +50,11 @@ options:
     type: string
     default:
     description: S3 endpoint URL
+  tv-s3-ssl-cert:
+    type: string
+    default:
+    description: |
+      SSL CA to use when connecting to S3
   # General configuration
   tv-datamover-max-uploads-pending:
     type: int
