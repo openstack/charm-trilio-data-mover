@@ -127,11 +127,10 @@ class TrilioDataMoverBaseCharm(
     @property
     def backup_target_type(self):
         # The main purpose of this property is to translate experimental-s3
-        # to s3 and s3 to UNKNOWN. This forces the deployer to
-        # use 'experimental-s3' for s3 support but the code can stay clean and
-        # refer to s3.
+        # to s3. This allows users who tried experimental-s3 a grace period
+        # before being pushed to s3.
         _type = hookenv.config("backup-target-type").lower()
-        if _type == 'experimental-s3':
+        if _type in ('experimental-s3', 's3'):
             return 's3'
         if _type == 'nfs':
             return 'nfs'

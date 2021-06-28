@@ -198,7 +198,7 @@ applications:
     charm: ../../../trilio-data-mover
     options:
       triliovault-pkg-source: *triliovault-pkg-source
-      backup-target-type: experimental-s3
+      backup-target-type: s3
   trilio-dm-api:
     charm: cs:~openstack-charmers-next/trilio-dm-api
     num_units: 1
@@ -215,7 +215,7 @@ applications:
     options:
       openstack-origin: *openstack-origin
       triliovault-pkg-source: *triliovault-pkg-source
-      backup-target-type: experimental-s3
+      backup-target-type: s3
   ceph-mon:
     charm: cs:~openstack-charmers-next/ceph-mon
     num_units: 3
