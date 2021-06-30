@@ -143,50 +143,50 @@ relations:
     - 'mysql-innodb-cluster:db-router'
 applications:
   keystone-mysql-router:
-    charm: cs:~openstack-charmers-next/mysql-router
+    charm: cs:~openstack-charmers/mysql-router
   cinder-mysql-router:
-    charm: cs:~openstack-charmers-next/mysql-router
+    charm: cs:~openstack-charmers/mysql-router
   neutron-api-mysql-router:
-    charm: cs:~openstack-charmers-next/mysql-router
+    charm: cs:~openstack-charmers/mysql-router
   glance-mysql-router:
-    charm: cs:~openstack-charmers-next/mysql-router
+    charm: cs:~openstack-charmers/mysql-router
   nova-cloud-controller-mysql-router:
-    charm: cs:~openstack-charmers-next/mysql-router
+    charm: cs:~openstack-charmers/mysql-router
   trilio-dm-api-mysql-router:
-    charm: cs:~openstack-charmers-next/mysql-router
+    charm: cs:~openstack-charmers/mysql-router
   trilio-dm-mysql-router:
-    charm: cs:~openstack-charmers-next/mysql-router
+    charm: cs:~openstack-charmers/mysql-router
   trilio-wlm-mysql-router:
-    charm: cs:~openstack-charmers-next/mysql-router
+    charm: cs:~openstack-charmers/mysql-router
   vault-mysql-router:
-    charm: cs:~openstack-charmers-next/mysql-router
+    charm: cs:~openstack-charmers/mysql-router
   placement-mysql-router:
-    charm: cs:~openstack-charmers-next/mysql-router
+    charm: cs:~openstack-charmers/mysql-router
   mysql-innodb-cluster:
-    charm: cs:~openstack-charmers-next/mysql-innodb-cluster
+    charm: cs:~openstack-charmers/mysql-innodb-cluster
     num_units: 3
     options:
       source: *openstack-origin
   glance:
-    charm: cs:~openstack-charmers-next/glance
+    charm: cs:~openstack-charmers/glance
     num_units: 1
     options:
       openstack-origin: *openstack-origin
   cinder:
-    charm: cs:~openstack-charmers-next/cinder
+    charm: cs:~openstack-charmers/cinder
     num_units: 1
     options:
       openstack-origin: *openstack-origin
       block-device: "None"
       glance-api-version: 2
   keystone:
-    charm: cs:~openstack-charmers-next/keystone
+    charm: cs:~openstack-charmers/keystone
     num_units: 1
     options:
       openstack-origin: *openstack-origin
       admin-password: openstack
   neutron-api:
-    charm: cs:~openstack-charmers-next/neutron-api
+    charm: cs:~openstack-charmers/neutron-api
     num_units: 1
     options:
       openstack-origin: *openstack-origin
@@ -194,23 +194,23 @@ applications:
       neutron-security-groups: true
       manage-neutron-plugin-legacy-mode: True
   neutron-gateway:
-    charm: cs:~openstack-charmers-next/neutron-gateway
+    charm: cs:~openstack-charmers/neutron-gateway
     num_units: 1
     options:
       openstack-origin: *openstack-origin
       bridge-mappings: physnet1:br-ex
   neutron-openvswitch:
-    charm: cs:~openstack-charmers-next/neutron-openvswitch
+    charm: cs:~openstack-charmers/neutron-openvswitch
     num_units: 0
   nova-cloud-controller:
-    charm: cs:~openstack-charmers-next/nova-cloud-controller
+    charm: cs:~openstack-charmers/nova-cloud-controller
     num_units: 1
     options:
       openstack-origin: *openstack-origin
       network-manager: Neutron
       debug: true
   nova-compute:
-    charm: cs:~openstack-charmers-next/nova-compute
+    charm: cs:~openstack-charmers/nova-compute
     num_units: 3
     consussurits: mem=4G
     options:
@@ -225,36 +225,36 @@ applications:
       # Allow for more retries when testing ontop of openstack
       config-flags: block_device_allocate_retries=120
   rabbitmq-server:
-    charm: cs:~openstack-charmers-next/rabbitmq-server
+    charm: cs:~openstack-charmers/rabbitmq-server
     num_units: 1
   trilio-data-mover:
     charm: ../../../trilio-data-mover
     options:
       triliovault-pkg-source: *triliovault-pkg-source
   trilio-dm-api:
-    charm: cs:~openstack-charmers-next/trilio-dm-api
+    charm: cs:~openstack-charmers/trilio-dm-api
     num_units: 1
     options:
       openstack-origin: *openstack-origin
       triliovault-pkg-source: *triliovault-pkg-source
   trilio-horizon-plugin:
-    charm: cs:~openstack-charmers-next/trilio-horizon-plugin
+    charm: cs:~openstack-charmers/trilio-horizon-plugin
     options:
       triliovault-pkg-source: *triliovault-pkg-source
   trilio-wlm:
-    charm: cs:~openstack-charmers-next/trilio-wlm
+    charm: cs:~openstack-charmers/trilio-wlm
     num_units: 1
     options:
       openstack-origin: *openstack-origin
       triliovault-pkg-source: *triliovault-pkg-source
   ceph-mon:
-    charm: cs:~openstack-charmers-next/ceph-mon
+    charm: cs:~openstack-charmers/ceph-mon
     num_units: 3
     options:
       source: *openstack-origin
       expected-osd-count: 3
   ceph-osd:
-    charm: cs:~openstack-charmers-next/ceph-osd
+    charm: cs:~openstack-charmers/ceph-osd
     consussurits: mem=1G
     num_units: 3
     options:
@@ -264,12 +264,12 @@ applications:
     storage:
       osd-devices:  cinder,40G
   cinder-ceph:
-    charm: cs:~openstack-charmers-next/cinder-ceph
+    charm: cs:~openstack-charmers/cinder-ceph
   vault:
     num_units: 1
-    charm: cs:~openstack-charmers-next/vault
+    charm: cs:~openstack-charmers/vault
   placement:
-    charm: cs:~openstack-charmers-next/placement
+    charm: cs:~openstack-charmers/placement
     num_units: 1
     options:
       openstack-origin: *openstack-origin
@@ -279,7 +279,7 @@ applications:
     storage:
       share: cinder,40G
   openstack-dashboard:
-    charm: cs:~openstack-charmers-next/openstack-dashboard
+    charm: cs:~openstack-charmers/openstack-dashboard
     num_units: 1
     options:
       openstack-origin: *openstack-origin

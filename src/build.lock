@@ -1,0 +1,180 @@
+{
+  "locks": [
+    {
+      "type": "layer",
+      "item": "layer:options",
+      "url": "https://github.com/juju-solutions/layer-options.git",
+      "vcs": null,
+      "branch": "fcdcea4e5de3e1556c24e6704607862d0ba00a56",
+      "commit": "fcdcea4e5de3e1556c24e6704607862d0ba00a56"
+    },
+    {
+      "type": "layer",
+      "item": "layer:basic",
+      "url": "https://github.com/juju-solutions/layer-basic.git",
+      "vcs": null,
+      "branch": "a3ff62c32c993d80417f6e093e3ef95e42f62083",
+      "commit": "a3ff62c32c993d80417f6e093e3ef95e42f62083"
+    },
+    {
+      "type": "layer",
+      "item": "layer:openstack",
+      "url": "https://github.com/openstack/charm-layer-openstack",
+      "vcs": null,
+      "branch": "207bac8bec837edc6a4d6003f51d5b59d2d75adb",
+      "commit": "207bac8bec837edc6a4d6003f51d5b59d2d75adb"
+    },
+    {
+      "type": "layer",
+      "item": "trilio-data-mover",
+      "url": null,
+      "vcs": null,
+      "branch": "7f98d8f9e7e8488a7761dad4fe84b962a6f3a7f2",
+      "commit": "7f98d8f9e7e8488a7761dad4fe84b962a6f3a7f2"
+    },
+    {
+      "type": "layer",
+      "item": "interface:tls-certificates",
+      "url": "https://github.com/juju-solutions/interface-tls-certificates",
+      "vcs": null,
+      "branch": "d9850016d930a6d507b9fd45e2598d327922b140",
+      "commit": "d9850016d930a6d507b9fd45e2598d327922b140"
+    },
+    {
+      "type": "layer",
+      "item": "interface:rabbitmq",
+      "url": "https://github.com/openstack/charm-interface-rabbitmq",
+      "vcs": null,
+      "branch": "383121fc584d2d3bf9d233eba0d3708398a4c468",
+      "commit": "383121fc584d2d3bf9d233eba0d3708398a4c468"
+    },
+    {
+      "type": "layer",
+      "item": "interface:ceph-client",
+      "url": "https://opendev.org/openstack/charm-interface-ceph-client.git",
+      "vcs": null,
+      "branch": "3ca251fb01a7cd51d2a0ee2b9b66647c8ffe891f",
+      "commit": "3ca251fb01a7cd51d2a0ee2b9b66647c8ffe891f"
+    },
+    {
+      "type": "layer",
+      "item": "interface:mysql-shared",
+      "url": "https://github.com/openstack/charm-interface-mysql-shared",
+      "vcs": null,
+      "branch": "06675c43c9f48ffa98b2abf2ddca137f8d18f31c",
+      "commit": "06675c43c9f48ffa98b2abf2ddca137f8d18f31c"
+    },
+    {
+      "type": "python_module",
+      "package": "netifaces",
+      "vcs": null,
+      "version": "0.11.0"
+    },
+    {
+      "type": "python_module",
+      "package": "charms.openstack",
+      "url": "git+https://opendev.org/openstack/charms.openstack.git",
+      "branch": "6c8eb01162edef5e3f8e3af6cb90905e8b2a3065",
+      "version": "6c8eb01162edef5e3f8e3af6cb90905e8b2a3065",
+      "vcs": "git"
+    },
+    {
+      "type": "python_module",
+      "package": "netaddr",
+      "vcs": null,
+      "version": "0.7.19"
+    },
+    {
+      "type": "python_module",
+      "package": "setuptools",
+      "vcs": null,
+      "version": "41.6.0"
+    },
+    {
+      "type": "python_module",
+      "package": "Jinja2",
+      "vcs": null,
+      "version": "2.10.1"
+    },
+    {
+      "type": "python_module",
+      "package": "pip",
+      "vcs": null,
+      "version": "18.1"
+    },
+    {
+      "type": "python_module",
+      "package": "pyaml",
+      "vcs": null,
+      "version": "20.4.0"
+    },
+    {
+      "type": "python_module",
+      "package": "dnspython",
+      "vcs": null,
+      "version": "1.16.0"
+    },
+    {
+      "type": "python_module",
+      "package": "MarkupSafe",
+      "vcs": null,
+      "version": "1.1.1"
+    },
+    {
+      "type": "python_module",
+      "package": "wheel",
+      "vcs": null,
+      "version": "0.33.6"
+    },
+    {
+      "type": "python_module",
+      "package": "pbr",
+      "vcs": null,
+      "version": "5.6.0"
+    },
+    {
+      "type": "python_module",
+      "package": "charms.reactive",
+      "vcs": null,
+      "version": "1.4.1"
+    },
+    {
+      "type": "python_module",
+      "package": "Tempita",
+      "vcs": null,
+      "version": "0.5.2"
+    },
+    {
+      "type": "python_module",
+      "package": "six",
+      "vcs": null,
+      "version": "1.16.0"
+    },
+    {
+      "type": "python_module",
+      "package": "PyYAML",
+      "vcs": null,
+      "version": "5.2"
+    },
+    {
+      "type": "python_module",
+      "package": "setuptools_scm",
+      "vcs": null,
+      "version": "1.17.0"
+    },
+    {
+      "type": "python_module",
+      "package": "charmhelpers",
+      "url": "git+https://github.com/juju/charm-helpers.git",
+      "branch": "d404354d1d350e66dcb43bdb5a72c504583497f9",
+      "version": "d404354d1d350e66dcb43bdb5a72c504583497f9",
+      "vcs": "git"
+    },
+    {
+      "type": "python_module",
+      "package": "psutil",
+      "vcs": null,
+      "version": "5.8.0"
+    }
+  ]
+}
