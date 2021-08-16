@@ -26,6 +26,8 @@ basic.init_config_states()
 
 import charmhelpers.core.hookenv as hookenv
 
+import charms.reactive as reactive
+
 import charms_openstack.charm
 
 # import the trilio_wlm module to get the charm definitions created.
@@ -40,12 +42,33 @@ def ghost_share(*args):
         trilio_dm_charm.ghost_nfs_share(secondary_nfs_share)
 
 
+def update_trilio(*args):
+    """Run setup after Trilio upgrade.
+    """
+    with charms_openstack.charm.provide_charm_instance() as trilio_charm:
+        interfaces = ["shared-db", "amqp"]
+        endpoints = [
+            reactive.relations.endpoint_from_flag("{}.available".format(i))
+            for i in interfaces]
+        ceph = reactive.endpoint_from_flag("ceph.available")
+        if ceph:
+            endpoints.append(ceph)
+        trilio_charm.run_trilio_upgrade(endpoints)
+        trilio_charm._assess_status()
+
+
 # Actions to function mapping, to allow for illegal python action names that
 # can map to a python function.
-ACTIONS = {"ghost-share": ghost_share}
+ACTIONS = {
+    "ghost-share": ghost_share,
+    "update-trilio": update_trilio
+}
 
 
 def main(args):
+    # Manually trigger any register atstart events to ensure all endpoints
+    # are correctly setup.
+    hookenv._run_atstart()
     action_name = os.path.basename(args[0])
     try:
         action = ACTIONS[action_name]
@@ -56,6 +79,7 @@ def main(args):
             action(args)
         except Exception as e:
             hookenv.function_fail(str(e))
+    hookenv._run_atexit()
 
 
 if __name__ == "__main__":
