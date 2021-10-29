@@ -1,5 +1,5 @@
 variables:
-  openstack-origin: &openstack-origin distro
+  openstack-origin: &openstack-origin 'cloud:focal-yoga'
   triliovault-pkg-source: &triliovault-pkg-source 'deb [trusted=yes] https://apt.fury.io/triliodata-4-1/ /'
 
 series: &series focal
@@ -141,6 +141,12 @@ relations:
     - 'placement-mysql-router:shared-db'
   - - 'placement-mysql-router:db-router'
     - 'mysql-innodb-cluster:db-router'
+  - - 'ceph-radosgw:mon'
+    - 'ceph-mon:radosgw'
+  - - 'ceph-radosgw:identity-service'
+    - 'keystone:identity-service'
+  - - 'ceph-radosgw:certificates'
+    - 'vault:certificates'
 applications:
   keystone-mysql-router:
     charm: cs:~openstack-charmers-next/mysql-router
@@ -165,6 +171,11 @@ applications:
   mysql-innodb-cluster:
     charm: cs:~openstack-charmers-next/mysql-innodb-cluster
     num_units: 3
+    options:
+      source: *openstack-origin
+  ceph-radosgw:
+    charm: cs:~openstack-charmers-next/ceph-radosgw
+    num_units: 1
     options:
       source: *openstack-origin
   glance:
@@ -231,6 +242,7 @@ applications:
     charm: ../../../trilio-data-mover
     options:
       triliovault-pkg-source: *triliovault-pkg-source
+      backup-target-type: s3
   trilio-dm-api:
     charm: cs:~openstack-charmers-next/trilio-dm-api
     num_units: 1
@@ -247,6 +259,7 @@ applications:
     options:
       openstack-origin: *openstack-origin
       triliovault-pkg-source: *triliovault-pkg-source
+      backup-target-type: s3
   ceph-mon:
     charm: cs:~openstack-charmers-next/ceph-mon
     num_units: 3
@@ -273,11 +286,6 @@ applications:
     num_units: 1
     options:
       openstack-origin: *openstack-origin
-  nfs-server-test-fixture:
-    charm: cs:~openstack-charmers-next/nfs-server-test-fixture
-    num_units: 1
-    storage:
-      share: cinder,40G
   openstack-dashboard:
     charm: cs:~openstack-charmers-next/openstack-dashboard
     num_units: 1

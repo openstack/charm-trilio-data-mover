@@ -223,7 +223,7 @@ applications:
   nova-compute:
     charm: cs:~openstack-charmers-next/nova-compute
     num_units: 3
-    consussurits: mem=4G
+    constraints: mem=4G
     options:
       openstack-origin: *openstack-origin
       config-flags: default_ephemeral_format=ext4
@@ -268,7 +268,7 @@ applications:
       expected-osd-count: 3
   ceph-osd:
     charm: cs:~openstack-charmers-next/ceph-osd
-    consussurits: mem=1G
+    constraints: mem=1G
     num_units: 3
     options:
       source: *openstack-origin

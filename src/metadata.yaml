@@ -14,10 +14,8 @@ tags:
 - storage
 - backup
 series:
-- xenial
 - bionic
 - focal
-- groovy
 requires:
   amqp:
     interface: rabbitmq

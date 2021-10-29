@@ -2,7 +2,7 @@ variables:
   openstack-origin: &openstack-origin distro
   triliovault-pkg-source: &triliovault-pkg-source 'deb [trusted=yes] https://apt.fury.io/triliodata-4-1/ /'
 
-series: &series focal
+series: &series hirsute
 
 relations:
   - - 'nova-compute:amqp'

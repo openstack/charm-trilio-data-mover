@@ -1,5 +1,5 @@
 variables:
-  openstack-origin: &openstack-origin distro
+  openstack-origin: &openstack-origin 'cloud:focal-wallaby'
   triliovault-pkg-source: &triliovault-pkg-source 'deb [trusted=yes] https://apt.fury.io/triliodata-4-1/ /'
 
 series: &series focal
