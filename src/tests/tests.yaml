@@ -7,6 +7,7 @@ configure:
   - s3:
     - zaza.openstack.charm_tests.vault.setup.auto_initialize
     - zaza.openstack.charm_tests.trilio.setup.basic_setup
+    - zaza.openstack.charm_tests.trilio.setup.restart_tvault_contego
     - zaza.openstack.charm_tests.glance.setup.add_cirros_image
     - zaza.openstack.charm_tests.glance.setup.add_lts_image
     - zaza.openstack.charm_tests.neutron.setup.basic_overcloud_network
@@ -14,37 +15,22 @@ configure:
     - zaza.openstack.charm_tests.nova.setup.manage_ssh_key
   - zaza.openstack.charm_tests.vault.setup.auto_initialize
   - zaza.openstack.charm_tests.trilio.setup.basic_setup
+  - zaza.openstack.charm_tests.trilio.setup.restart_tvault_contego
   - zaza.openstack.charm_tests.glance.setup.add_cirros_image
   - zaza.openstack.charm_tests.glance.setup.add_lts_image
   - zaza.openstack.charm_tests.neutron.setup.basic_overcloud_network
   - zaza.openstack.charm_tests.nova.setup.create_flavors
   - zaza.openstack.charm_tests.nova.setup.manage_ssh_key
 gate_bundles:
-  - bionic-queens-40
-  - bionic-queens-41
+  - s3: bionic-train-41-s3
   - bionic-stein-40
   - bionic-stein-41
-  - bionic-ussuri-41
-  - focal-ussuri-41
-  - focal-victoria-41
-  - focal-wallaby-41
-  - focal-xena-41
-  - hirsute-wallaby-41
-  - impish-xena-41
-  - s3: focal-ussuri-41-s3
-  - s3: focal-victoria-41-s3
-  - s3: focal-wallaby-41-s3
-  - s3: focal-xena-41-s3
-  - s3: hirsute-wallaby-41-s3
-  - s3: impish-xena-41-s3
-dev_bundles:
   - bionic-train-40
   - bionic-train-41
-  - focal-yoga-41
-  - jammy-yoga-41
-  - s3: bionic-train-41-s3
-  - s3: focal-yoga-41-s3
-  - s3: jammy-yoga-41-s3
+  - bionic-ussuri-41
+  - focal-ussuri-41
+  - bionic-queens-40
+  - bionic-queens-41
 smoke_bundles:
   - focal-ussuri-41
 target_deploy_status:
@@ -65,15 +51,10 @@ target_deploy_status:
     workload-status-message-regex: "configuration not set|Unit is ready"
   trilio-data-mover:
     workload-status: blocked
-    workload-status-message-regex: "configuration not set|Unit is ready"
+    workload-status-message-regex: "^.*configuration not set|Unit is ready|Services not running that should be: tvault-contego"
   glance:
     workload-status: waiting
     workload-status-message: "Incomplete relations: storage-backend"
   ceph-radosgw:
     workload-status: waiting
     workload-status-message: "Incomplete relations: mon"
-tests_options:
-  force_deploy:
-    - hirsute-wallaby-41-s3
-    - impish-xena-41-s3
-    - jammy-yoga-41-s3

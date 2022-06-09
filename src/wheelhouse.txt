@@ -1,4 +1,24 @@
+# Temporary pins to reflects existing charm builds. Need updating when
+# channels and tracks are setup.
+# flit_core tactival workaround to ensure the wheel is not present irrespective of
+# the build env as the flit_core wheel causes a pip failure.
+flit_core;python_version >= '4.0'
+pyaml==20.4.0
+PyYAML==5.2
+setuptools==41.6.0
+netifaces==0.11.0
+six==1.16.0
+pbr==5.6.0
+psutil==5.8.0
+dnspython==1.16.0
+pip==18.1
+wheel==0.33.6
+Tempita==0.4
+Jinja2==2.10.1
+charms.reactive==1.4.1
+netaddr==0.7.19
+setuptools_scm==1.17.0
+MarkupSafe==1.1.1
+git+https://github.com/juju/charm-helpers.git@d404354d1d350e66dcb43bdb5a72c504583497f9#egg=charmhelpers
+git+https://opendev.org/openstack/charms.openstack.git@6c8eb01162edef5e3f8e3af6cb90905e8b2a3065#egg=charms.openstack
 
-git+https://opendev.org/openstack/charms.openstack.git#egg=charms.openstack
-
-git+https://github.com/juju/charm-helpers.git#egg=charmhelpers

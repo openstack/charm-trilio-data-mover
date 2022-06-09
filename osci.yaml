@@ -3,145 +3,84 @@
       - charm-yoga-unit-jobs
     check:
       jobs:
-      - bionic-queens-40
-      - bionic-queens-41
-      - bionic-stein-40
-      - bionic-stein-41
-      # Non-voting due to:
-      # https://bugs.launchpad.net/charm-trilio-data-mover/+bug/1951999
-      - bionic-train-40:
-          voting: false
-      - bionic-train-41:
-          voting: false
-      - bionic-train-41-s3:
-          voting: false
-      - bionic-ussuri-41:
-          voting: false
-      - focal-ussuri-41:
-          voting: false
-      - focal-ussuri-41-s3:
-          voting: false
-      - focal-victoria-41-s3:
-          voting: false
-      - focal-wallaby-41-s3:
-          voting: false
-      - focal-xena-41-s3:
-          voting: false
-      - focal-yoga-41-s3:
-          voting: false
-      - hirsute-wallaby-41-s3:
-          voting: false
-      - impish-xena-41-s3:
-          voting: false
-      - jammy-yoga-41-s3:
-          voting: false
+      - charm-build
+      - bionic-queens-40_trilio-data-mover
+      - bionic-stein-40_trilio-data-mover
+      - bionic-queens-41_trilio-data-mover
+      - bionic-stein-41_trilio-data-mover
+      - bionic-train-40_trilio-data-mover
+      - bionic-train-41_trilio-data-mover
+      - bionic-train-41-s3_trilio-data-mover
+      - bionic-ussuri-41_trilio-data-mover
+      - focal-ussuri-41_trilio-data-mover
     vars:
       needs_charm_build: true
       charm_build_name: trilio-data-mover
+      build_type: charmcraft
 - job:
-    name: focal-ussuri-41
+    name: focal-ussuri-41_trilio-data-mover
     parent: func-target
     dependencies:
       - osci-lint
       - tox-py36
       - tox-py38
-      - tox-py39
+      - charm-build
     vars:
       tox_extra_args: focal-ussuri-41
 - job:
-    name: bionic-queens-40
+    name: bionic-ussuri-41_trilio-data-mover
     parent: func-target
-    dependencies: &smoke-jobs
-      - focal-ussuri-41
-    vars:
-      tox_extra_args: bionic-queens-40
-- job:
-    name: bionic-queens-41
-    parent: func-target
-    dependencies: *smoke-jobs
-    vars:
-      tox_extra_args: bionic-queens-41
-- job:
-    name: bionic-stein-40
-    parent: func-target
-    dependencies: *smoke-jobs
-    vars:
-      tox_extra_args: bionic-stein-40
-- job:
-    name: bionic-stein-41
-    parent: func-target
-    dependencies: *smoke-jobs
-    vars:
-      tox_extra_args: bionic-stein-41
-- job:
-    name: bionic-train-40
-    parent: func-target
-    dependencies: *smoke-jobs
-    vars:
-      tox_extra_args: bionic-train-40
-- job:
-    name: bionic-train-41
-    parent: func-target
-    dependencies: *smoke-jobs
-    vars:
-      tox_extra_args: bionic-train-41
-- job:
-    name: bionic-ussuri-41
-    parent: func-target
-    dependencies: *smoke-jobs
+    dependencies:
+      - focal-ussuri-41_trilio-data-mover
     vars:
       tox_extra_args: bionic-ussuri-41
 - job:
-    name: bionic-train-41-s3
+    name: bionic-train-41-s3_trilio-data-mover
     parent: func-target
-    dependencies: *smoke-jobs
+    dependencies:
+      - focal-ussuri-41_trilio-data-mover
     vars:
       tox_extra_args: bionic-train-41-s3
 - job:
-    name: focal-ussuri-41-s3
+    name: bionic-train-40_trilio-data-mover
     parent: func-target
-    dependencies: *smoke-jobs
+    dependencies:
+      - bionic-ussuri-41_trilio-data-mover
     vars:
-      tox_extra_args: focal-ussuri-41-s3
+      tox_extra_args: bionic-train-40
 - job:
-    name: focal-victoria-41-s3
+    name: bionic-train-41_trilio-data-mover
     parent: func-target
-    dependencies: *smoke-jobs
+    dependencies:
+      - bionic-train-41-s3_trilio-data-mover
     vars:
-      tox_extra_args: focal-victoria-41-s3
+      tox_extra_args: bionic-train-41
 - job:
-    name: focal-wallaby-41-s3
+    name: bionic-stein-40_trilio-data-mover
     parent: func-target
-    dependencies: *smoke-jobs
+    dependencies:
+      - bionic-train-40_trilio-data-mover
     vars:
-      tox_extra_args: focal-wallaby-41-s3
+      tox_extra_args: bionic-stein-40
+
 - job:
-    name: focal-xena-41-s3
+    name: bionic-stein-41_trilio-data-mover
     parent: func-target
-    dependencies: *smoke-jobs
+    dependencies:
+      - bionic-train-41_trilio-data-mover
     vars:
-      tox_extra_args: focal-xena-41-s3
+      tox_extra_args: bionic-stein-41
 - job:
-    name: focal-yoga-41-s3
+    name: bionic-queens-40_trilio-data-mover
     parent: func-target
-    dependencies: *smoke-jobs
+    dependencies:
+      - bionic-stein-40_trilio-data-mover
     vars:
-      tox_extra_args: focal-yoga-41-s3
+      tox_extra_args: bionic-queens-40
 - job:
-    name: hirsute-wallaby-41-s3
+    name: bionic-queens-41_trilio-data-mover
     parent: func-target
-    dependencies: *smoke-jobs
+    dependencies:
+      - bionic-stein-41_trilio-data-mover
     vars:
-      tox_extra_args: hirsute-wallaby-41-s3
-- job:
-    name: impish-xena-41-s3
-    parent: func-target
-    dependencies: *smoke-jobs
-    vars:
-      tox_extra_args: impish-xena-41-s3
-- job:
-    name: jammy-yoga-41-s3
-    parent: func-target
-    dependencies: *smoke-jobs
-    vars:
-      tox_extra_args: jammy-yoga-41-s3
+      tox_extra_args: bionic-queens-41

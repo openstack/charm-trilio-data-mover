@@ -1,6 +1,11 @@
-local_overlay_enabled: False
 variables:
   openstack-origin: &openstack-origin 'cloud:bionic-train'
+  openstack-charm-channel: &openstack-charm-channel 'train/edge'
+  ceph-charm-channel: &ceph-charm-channel 'octopus/edge'
+  rabbit-charm-channel: &rabbit-charm-channel '3.8/edge'
+  mysql-charm-channel: &mysql-charm-channel '5.7/edge'
+  vault-charm-channel: &vault-charm-channel '1.7/edge'
+  trilio-charm-channel: &trilio-charm-channel 'latest/stable'
   triliovault-pkg-source: &triliovault-pkg-source 'deb [trusted=yes] https://apt.fury.io/triliodata-4-1/ /'
 
 series: &series bionic
@@ -124,60 +129,69 @@ relations:
     - 'vault:certificates'
 applications:
   ceph-radosgw:
-    charm: cs:~openstack-charmers-next/ceph-radosgw
+    charm: ch:ceph-radosgw
+    channel: *ceph-charm-channel
     num_units: 1
     options:
       source: *openstack-origin
   glance:
-    charm: cs:~openstack-charmers-next/glance
+    charm: ch:glance
+    channel: *openstack-charm-channel
     num_units: 1
     options:
       openstack-origin: *openstack-origin
   cinder:
-    charm: cs:~openstack-charmers-next/cinder
+    charm: ch:cinder
+    channel: *openstack-charm-channel
     num_units: 1
     options:
       openstack-origin: *openstack-origin
       block-device: "None"
       glance-api-version: 2
   keystone:
-    charm: cs:~openstack-charmers-next/keystone
-    series: bionic
+    charm: ch:keystone
+    channel: *openstack-charm-channel
     num_units: 1
     options:
       openstack-origin: *openstack-origin
       admin-password: openstack
   mysql:
-    charm: cs:~openstack-charmers-next/percona-cluster
+    charm: ch:percona-cluster
+    channel: *mysql-charm-channel
     num_units: 1
     options:
       innodb-buffer-pool-size: 256M
       max-connections: 1000
   neutron-api:
-    charm: cs:~openstack-charmers-next/neutron-api
+    charm: ch:neutron-api
+    channel: *openstack-charm-channel
     num_units: 1
     options:
       openstack-origin: *openstack-origin
       flat-network-providers: physnet1
       neutron-security-groups: true
   neutron-gateway:
-    charm: cs:~openstack-charmers-next/neutron-gateway
+    charm: ch:neutron-gateway
+    channel: *openstack-charm-channel
     num_units: 1
     options:
       openstack-origin: *openstack-origin
       bridge-mappings: physnet1:br-ex
   neutron-openvswitch:
-    charm: cs:~openstack-charmers-next/neutron-openvswitch
+    charm: ch:neutron-openvswitch
+    channel: *openstack-charm-channel
     num_units: 0
   nova-cloud-controller:
-    charm: cs:~openstack-charmers-next/nova-cloud-controller
+    charm: ch:nova-cloud-controller
+    channel: *openstack-charm-channel
     num_units: 1
     options:
       openstack-origin: *openstack-origin
       network-manager: Neutron
       debug: true
   nova-compute:
-    charm: cs:~openstack-charmers-next/nova-compute
+    charm: ch:nova-compute
+    channel: *openstack-charm-channel
     num_units: 3
     constraints: mem=4G
     options:
@@ -192,38 +206,45 @@ applications:
       # Allow for more retries when testing ontop of openstack
       config-flags: block_device_allocate_retries=120
   rabbitmq-server:
-    charm: cs:~openstack-charmers-next/rabbitmq-server
+    charm: ch:rabbitmq-server
+    channel: *rabbit-charm-channel
     num_units: 1
   trilio-data-mover:
-    charm: ../../../trilio-data-mover
+    charm: ../../../trilio-data-mover.charm
+    series: bionic
     options:
       triliovault-pkg-source: *triliovault-pkg-source
-      backup-target-type: s3
+      backup-target-type: experimental-s3
   trilio-dm-api:
-    charm: cs:~openstack-charmers-next/trilio-dm-api
+    charm: ch:openstack-charmers-trilio-dm-api
+    channel: *trilio-charm-channel
     num_units: 1
     options:
       openstack-origin: *openstack-origin
       triliovault-pkg-source: *triliovault-pkg-source
   trilio-horizon-plugin:
-    charm: cs:~openstack-charmers-next/trilio-horizon-plugin
+    charm: ch:openstack-charmers-trilio-horizon-plugin
+    channel: *trilio-charm-channel
     options:
       triliovault-pkg-source: *triliovault-pkg-source
   trilio-wlm:
-    charm: cs:~openstack-charmers-next/trilio-wlm
+    charm: ch:openstack-charmers-trilio-wlm
+    channel: *trilio-charm-channel
     num_units: 1
     options:
       openstack-origin: *openstack-origin
       triliovault-pkg-source: *triliovault-pkg-source
       backup-target-type: s3
   ceph-mon:
-    charm: cs:~openstack-charmers-next/ceph-mon
+    charm: ch:ceph-mon
+    channel: *ceph-charm-channel
     num_units: 3
     options:
       source: *openstack-origin
       expected-osd-count: 3
   ceph-osd:
-    charm: cs:~openstack-charmers-next/ceph-osd
+    charm: ch:ceph-osd
+    channel: *ceph-charm-channel
     constraints: mem=1G
     num_units: 3
     options:
@@ -233,17 +254,21 @@ applications:
     storage:
       osd-devices:  cinder,40G
   cinder-ceph:
-    charm: cs:~openstack-charmers-next/cinder-ceph
+    charm: ch:cinder-ceph
+    channel: *openstack-charm-channel
   vault:
     num_units: 1
-    charm: cs:~openstack-charmers-next/vault
+    charm: ch:vault
+    channel: *vault-charm-channel
   placement:
-    charm: cs:~openstack-charmers-next/placement
+    charm: ch:placement
+    channel: *openstack-charm-channel
     num_units: 1
     options:
       openstack-origin: *openstack-origin
   openstack-dashboard:
-    charm: cs:~openstack-charmers-next/openstack-dashboard
+    charm: ch:openstack-dashboard
+    channel: *openstack-charm-channel
     num_units: 1
     options:
       openstack-origin: *openstack-origin
