@@ -90,9 +90,10 @@ class DataMoverRelationAdapaters(os_adapters.OpenStackAPIRelationAdapters):
 
 class TrilioDataMoverBaseCharm(
     charms_openstack.plugins.TrilioVaultSubordinateCharm,
-    charms_openstack.plugins.TrilioVaultCharmGhostAction,
     charms_openstack.plugins.BaseOpenStackCephCharm,
 ):
+
+    abstract_class = True
 
     release = "queens"
     trilio_release = "4.0"
@@ -257,7 +258,10 @@ class TrilioDataMoverBaseCharm(
         return 'tvault-contego'
 
 
-class TrilioDataMoverRockyCharm(TrilioDataMoverBaseCharm):
+class TrilioDataMoverRockyCharm(
+    TrilioDataMoverBaseCharm,
+    charms_openstack.plugins.TrilioVaultCharmGhostAction,
+):
 
     release = "rocky"
     trilio_release = "4.0"
@@ -270,3 +274,57 @@ class TrilioDataMoverRockyCharm(TrilioDataMoverBaseCharm):
     @classmethod
     def trilio_version_package(cls):
         return 'python3-tvault-contego'
+
+
+class TrilioDataMoverQueens41(
+    TrilioDataMoverBaseCharm,
+    charms_openstack.plugins.TrilioVaultCharmGhostAction
+):
+
+    # First release supported
+    release = "queens"
+    trilio_release = "4.1"
+
+
+class TrilioDataMoverUssuri41(
+    TrilioDataMoverRockyCharm,
+    charms_openstack.plugins.TrilioVaultCharmGhostAction
+):
+
+    # First release supported
+    release = "ussuri"
+    trilio_release = "4.1"
+
+
+class TrilioDataMoverQueens42(
+    TrilioDataMoverBaseCharm,
+    charms_openstack.plugins.TrilioVault42CharmGhostAction
+):
+
+    # First release supported
+    release = "queens"
+    trilio_release = "4.2"
+
+
+class TrilioDataMoverStein42(
+    TrilioDataMoverBaseCharm,
+    charms_openstack.plugins.TrilioVault42CharmGhostAction
+):
+    release = "rocky"
+    trilio_release = "4.2"
+
+    # Python version used to execute installed workload
+    python_version = 3
+
+    base_packages = ["python3-tvault-contego", "nfs-common", "contego"]
+
+    @classmethod
+    def trilio_version_package(cls):
+        return 'python3-tvault-contego'
+
+
+class TrilioWLMCharmUssur42(
+    TrilioDataMoverStein42,
+):
+    release = "ussuri"
+    trilio_release = "4.2"

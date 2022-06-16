@@ -45,6 +45,25 @@ options:
     default:
     description: |
       SSL CA to use when connecting to S3
+  vault_s3_max_pool_connections:
+    type: int
+    default: 500
+    description: |
+      The maximum number of connections to keep in a connection pool
+      This option is ignored if Trilio is before 4.2
+  bucket_object_lock:
+    type: boolean
+    default: False
+    description: |
+      S3 bucket object locking is enabled
+      This option is ignored if Trilio is before 4.2
+  use_manifest_suffix:
+    type: boolean
+    default: False
+    description: |
+      To preserve backward compatibility, set this to False. When set to False,
+      s3fuse creates manifest file names without suffix
+      This option is ignored if Trilio is before 4.2
   # General configuration
   tv-datamover-max-uploads-pending:
     type: int
@@ -65,6 +84,19 @@ options:
       This is the number of times datamover will try to connect to
       the cinder service.
       This option is ignored if Trilio is before 4.1.94
+  multipath-rescan-opts:
+    type: string
+    default: "-m,-s,-u"
+    description: |
+      Provide comma separated options which are needed to form a rescan command like
+      this; rescanscsi-bus.sh -m -s -u
+      This option is ignored if Trilio is before 4.2
+  nbd-timeout:
+    type: int
+    default: 10
+    description: |
+      Amount of time, in seconds, to wait for NBD device start up
+      This option is ignored if Trilio is before 4.2
   # DROP
   tv-data-dir:
     type: string

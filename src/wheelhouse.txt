@@ -20,5 +20,5 @@ netaddr==0.7.19
 setuptools_scm==1.17.0
 MarkupSafe==1.1.1
 git+https://github.com/juju/charm-helpers.git@d404354d1d350e66dcb43bdb5a72c504583497f9#egg=charmhelpers
-git+https://opendev.org/openstack/charms.openstack.git@6c8eb01162edef5e3f8e3af6cb90905e8b2a3065#egg=charms.openstack
+git+https://opendev.org/openstack/charms.openstack.git#egg=charms.openstack
 
