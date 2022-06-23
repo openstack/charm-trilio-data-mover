@@ -1,18 +1,7 @@
 charm_name: trilio-data-mover
 tests:
   - zaza.openstack.charm_tests.trilio.tests.TrilioDataMoverNFSTest
-  - s3:
-    - zaza.openstack.charm_tests.trilio.tests.TrilioDataMoverS3Test
 configure:
-  - s3:
-    - zaza.openstack.charm_tests.vault.setup.auto_initialize
-    - zaza.openstack.charm_tests.trilio.setup.basic_setup
-    - zaza.openstack.charm_tests.trilio.setup.restart_tvault_contego
-    - zaza.openstack.charm_tests.glance.setup.add_cirros_image
-    - zaza.openstack.charm_tests.glance.setup.add_lts_image
-    - zaza.openstack.charm_tests.neutron.setup.basic_overcloud_network
-    - zaza.openstack.charm_tests.nova.setup.create_flavors
-    - zaza.openstack.charm_tests.nova.setup.manage_ssh_key
   - zaza.openstack.charm_tests.vault.setup.auto_initialize
   - zaza.openstack.charm_tests.trilio.setup.basic_setup
   - zaza.openstack.charm_tests.trilio.setup.restart_tvault_contego
@@ -22,17 +11,12 @@ configure:
   - zaza.openstack.charm_tests.nova.setup.create_flavors
   - zaza.openstack.charm_tests.nova.setup.manage_ssh_key
 gate_bundles:
-  - s3: bionic-train-41-s3
-  - bionic-stein-40
-  - bionic-stein-41
-  - bionic-train-40
-  - bionic-train-41
-  - bionic-ussuri-41
-  - focal-ussuri-41
   - bionic-queens-40
-  - bionic-queens-41
 smoke_bundles:
-  - focal-ussuri-41
+  - bionic-queens-40
+dev_bundles:
+  - bionic-stein-40
+  - bionic-train-40
 target_deploy_status:
   vault:
     workload-status: blocked
