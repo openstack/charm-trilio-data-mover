@@ -1,18 +1,15 @@
 - project:
     templates:
-      - charm-yoga-unit-jobs
+      - charm-unit-jobs-py36
+      - charm-unit-jobs-py38
     check:
       jobs:
       - charm-build
       - bionic-queens-40_trilio-data-mover
-      - bionic-stein-40_trilio-data-mover
       - bionic-queens-41_trilio-data-mover
-      - bionic-stein-41_trilio-data-mover
-      - bionic-train-40_trilio-data-mover
-      - bionic-train-41_trilio-data-mover
-      - bionic-train-41-s3_trilio-data-mover
       - bionic-ussuri-41_trilio-data-mover
       - focal-ussuri-41_trilio-data-mover
+      - focal-ussuri-41-s3_trilio-data-mover
     vars:
       needs_charm_build: true
       charm_build_name: trilio-data-mover
@@ -28,59 +25,30 @@
     vars:
       tox_extra_args: focal-ussuri-41
 - job:
+    name: focal-ussuri-41-s3_trilio-data-mover
+    parent: func-target
+    dependencies:
+      - focal-ussuri-41_trilio-data-mover
+    vars:
+      tox_extra_args: focal-ussuri-41-s3
+- job:
     name: bionic-ussuri-41_trilio-data-mover
     parent: func-target
     dependencies:
-      - focal-ussuri-41_trilio-data-mover
+      - focal-ussuri-41-s3_trilio-data-mover
     vars:
       tox_extra_args: bionic-ussuri-41
-- job:
-    name: bionic-train-41-s3_trilio-data-mover
-    parent: func-target
-    dependencies:
-      - focal-ussuri-41_trilio-data-mover
-    vars:
-      tox_extra_args: bionic-train-41-s3
-- job:
-    name: bionic-train-40_trilio-data-mover
-    parent: func-target
-    dependencies:
-      - bionic-ussuri-41_trilio-data-mover
-    vars:
-      tox_extra_args: bionic-train-40
-- job:
-    name: bionic-train-41_trilio-data-mover
-    parent: func-target
-    dependencies:
-      - bionic-train-41-s3_trilio-data-mover
-    vars:
-      tox_extra_args: bionic-train-41
-- job:
-    name: bionic-stein-40_trilio-data-mover
-    parent: func-target
-    dependencies:
-      - bionic-train-40_trilio-data-mover
-    vars:
-      tox_extra_args: bionic-stein-40
-
-- job:
-    name: bionic-stein-41_trilio-data-mover
-    parent: func-target
-    dependencies:
-      - bionic-train-41_trilio-data-mover
-    vars:
-      tox_extra_args: bionic-stein-41
-- job:
-    name: bionic-queens-40_trilio-data-mover
-    parent: func-target
-    dependencies:
-      - bionic-stein-40_trilio-data-mover
-    vars:
-      tox_extra_args: bionic-queens-40
 - job:
     name: bionic-queens-41_trilio-data-mover
     parent: func-target
     dependencies:
-      - bionic-stein-41_trilio-data-mover
+      - focal-ussuri-41_trilio-data-mover
     vars:
       tox_extra_args: bionic-queens-41
+- job:
+    name: bionic-queens-40_trilio-data-mover
+    parent: func-target
+    dependencies:
+      - bionic-queens-41_trilio-data-mover
+    vars:
+      tox_extra_args: bionic-queens-40
