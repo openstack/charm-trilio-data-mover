@@ -25,6 +25,7 @@ gate_bundles:
   - s3: focal-ussuri-42-s3
   - focal-ussuri-42
   - focal-ussuri-41
+  - focal-wallaby-42
   - bionic-ussuri-42
   - bionic-queens-42
   - bionic-queens-41

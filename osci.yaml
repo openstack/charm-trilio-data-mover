@@ -10,6 +10,7 @@
       - bionic-ussuri-42_trilio-data-mover
       - focal-ussuri-41_trilio-data-mover
       - focal-ussuri-42_trilio-data-mover
+      - focal-wallaby-42_trilio-data-mover
       - focal-ussuri-42-s3_trilio-data-mover
     vars:
       needs_charm_build: true
@@ -32,6 +33,13 @@
       - focal-ussuri-42_trilio-data-mover
     vars:
       tox_extra_args: focal-ussuri-42-s3
+- job:
+    name: focal-wallaby-42_trilio-data-mover
+    parent: func-target
+    dependencies:
+      - focal-ussuri-42_trilio-data-mover
+    vars:
+      tox_extra_args: focal-wallaby-42
 - job:
     name: bionic-ussuri-42_trilio-data-mover
     parent: func-target

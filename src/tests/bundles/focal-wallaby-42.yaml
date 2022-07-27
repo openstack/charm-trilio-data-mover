@@ -1,7 +1,7 @@
 variables:
-  openstack-origin: &openstack-origin distro
-  openstack-charm-channel: &openstack-charm-channel 'ussuri/edge'
-  ceph-charm-channel: &ceph-charm-channel 'octopus/edge'
+  openstack-origin: &openstack-origin 'cloud:focal-wallaby'
+  openstack-charm-channel: &openstack-charm-channel 'wallaby/edge'
+  ceph-charm-channel: &ceph-charm-channel 'pacific/edge'
   rabbit-charm-channel: &rabbit-charm-channel '3.9/edge'
   mysql-charm-channel: &mysql-charm-channel '8.0/edge'
   vault-charm-channel: &vault-charm-channel '1.7/edge'
@@ -147,13 +147,6 @@ relations:
     - 'placement-mysql-router:shared-db'
   - - 'placement-mysql-router:db-router'
     - 'mysql-innodb-cluster:db-router'
-
-  - - 'ceph-radosgw:mon'
-    - 'ceph-mon:radosgw'
-  - - 'ceph-radosgw:identity-service'
-    - 'keystone:identity-service'
-  - - 'ceph-radosgw:certificates'
-    - 'vault:certificates'
 applications:
   keystone-mysql-router:
     charm: ch:mysql-router
@@ -189,12 +182,6 @@ applications:
     charm: ch:mysql-innodb-cluster
     channel: *mysql-charm-channel
     num_units: 3
-    options:
-      source: *openstack-origin
-  ceph-radosgw:
-    charm: ch:ceph-radosgw
-    channel: *ceph-charm-channel
-    num_units: 1
     options:
       source: *openstack-origin
   glance:
@@ -268,10 +255,9 @@ applications:
     num_units: 1
   trilio-data-mover:
     charm: ../../../trilio-data-mover.charm
-    series: *series
+    series: bionic
     options:
       triliovault-pkg-source: *triliovault-pkg-source
-      backup-target-type: s3
   trilio-dm-api:
     charm: ch:trilio-dm-api
     channel: *trilio-charm-channel
@@ -291,7 +277,6 @@ applications:
     options:
       openstack-origin: *openstack-origin
       triliovault-pkg-source: *triliovault-pkg-source
-      backup-target-type: s3
   ceph-mon:
     charm: ch:ceph-mon
     channel: *ceph-charm-channel
@@ -323,6 +308,11 @@ applications:
     num_units: 1
     options:
       openstack-origin: *openstack-origin
+  nfs-server-test-fixture:
+    charm: cs:~openstack-charmers-next/nfs-server-test-fixture
+    num_units: 1
+    storage:
+      share: cinder,40G
   openstack-dashboard:
     charm: ch:openstack-dashboard
     channel: *openstack-charm-channel
