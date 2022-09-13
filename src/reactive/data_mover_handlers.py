@@ -12,6 +12,9 @@
 
 import charms_openstack.charm as charm
 import charms.reactive as reactive
+import charmhelpers.core.kernel as ch_kernel
+import charmhelpers.core.host as ch_host
+import charmhelpers.core.hookenv as ch_hookenv
 
 # This charm's library contains all of the handler code associated with
 # trilio_dm
@@ -36,6 +39,23 @@ def render_config(*args):
         charm_instance.render_with_interfaces(args)
         charm_instance.assess_status()
     reactive.set_state("config.rendered")
+
+
+@reactive.when_not('is-update-status-hook')
+@reactive.when('charm.installed')
+def setup_kernel_modules():
+    module = 'nbd'
+    if ch_host.is_container():
+        ch_hookenv.log(
+            "Cannot load modules inside of a container",
+            level=ch_hookenv.WARNING)
+    else:
+        try:
+            ch_kernel.modprobe(module)
+        except Exception:
+            ch_hookenv.log(
+                "Failed to load kernel module '%s'" % module,
+                level=ch_hookenv.WARNING)
 
 
 @reactive.when('shared-db.connected')
