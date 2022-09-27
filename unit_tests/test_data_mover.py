@@ -93,10 +93,16 @@ class Test(test_utils.PatchHelper):
             "ceph_connected": (
                 "ceph.connected",
             ),
+            "setup_kernel_modules": (
+                "charm.installed",
+            ),
         }
         when_not_patterns = {
             "ceph_connected": (
                 "ceph.access.req.sent",
+            ),
+            "setup_kernel_modules": (
+                "is-update-status-hook",
             ),
         }
         # check the when hooks are attached to the expected functions
