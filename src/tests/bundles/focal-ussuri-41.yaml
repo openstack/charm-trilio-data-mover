@@ -5,7 +5,7 @@ variables:
   rabbit-charm-channel: &rabbit-charm-channel '3.9/edge'
   mysql-charm-channel: &mysql-charm-channel '8.0/edge'
   vault-charm-channel: &vault-charm-channel '1.7/edge'
-  trilio-charm-channel: &trilio-charm-channel 'latest/edge'
+  trilio-charm-channel: &trilio-charm-channel '4.2/edge'
   triliovault-pkg-source: &triliovault-pkg-source 'deb [trusted=yes] https://apt.fury.io/triliodata-4-1/ /'
 
 series: &series focal
