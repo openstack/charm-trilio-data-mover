@@ -140,7 +140,6 @@ applications:
   keystone:
     charm: ch:keystone
     channel: *openstack-charm-channel
-    series: bionic
     num_units: 1
     options:
       openstack-origin: *openstack-origin
@@ -201,8 +200,8 @@ applications:
     channel: *rabbit-charm-channel
     num_units: 1
   trilio-data-mover:
-    charm: ../../../trilio-data-mover.charm
-    series: bionic
+    charm: ../../../trilio-data-mover_ubuntu-18.04-amd64.charm
+    series: *series
     options:
       triliovault-pkg-source: *triliovault-pkg-source
   trilio-dm-api:

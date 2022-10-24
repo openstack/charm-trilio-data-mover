@@ -267,7 +267,7 @@ applications:
     channel: *rabbit-charm-channel
     num_units: 1
   trilio-data-mover:
-    charm: ../../../trilio-data-mover.charm
+    charm: ../../../trilio-data-mover_ubuntu-20.04-amd64.charm
     series: *series
     options:
       triliovault-pkg-source: *triliovault-pkg-source

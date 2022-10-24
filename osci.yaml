@@ -16,6 +16,7 @@
       needs_charm_build: true
       charm_build_name: trilio-data-mover
       build_type: charmcraft
+      charmcraft_channel: 2.0/stable
 - job:
     name: focal-ussuri-42_trilio-data-mover
     parent: func-target
